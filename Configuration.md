@@ -75,7 +75,7 @@ A sample logging section could look like this:
 <logging config="/var/lib/linknx/logging.conf"/>
 ``` 
 
-Detailed syntax is explained in the [Logging] page.
+Detailed syntax is explained in the [Logging](Logging) page.
 
 # Objects definition section
 
