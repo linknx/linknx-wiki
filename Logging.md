@@ -20,7 +20,7 @@ The log messages for level ERROR or WARN go to stderr, all other messages go to 
 With log4cpp logger, the logging configuration looks like this:
 
 ```xml
-&lt;logging output="/var/log/linknx.log" format="%d{%Y%m%d %H:%M:%S,%l} %5p %c %x: %m%n" level="INFO"/&gt;
+<logging output="/var/log/linknx.log" format="%d{%Y%m%d %H:%M:%S,%l} %5p %c %x: %m%n" level="INFO"/>
 ```
 
 The allowed parameters are:
