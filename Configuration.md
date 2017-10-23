@@ -75,51 +75,56 @@ A sample logging section could look like this:
 <logging config="/var/lib/linknx/logging.conf"/>
 ``` 
 
-Detailed syntax is explained in [Logging_section] page.
-Objects definition section
+Detailed syntax is explained in the [Logging] page.
 
-This is the main part of the linknx configuration. All KNX objects that linknx interacts with (in the rules) and which can be accessed by the web visualisation [KnxWeb] are defined here.
+# Objects definition section
+
+This is the main part of the linknx configuration. All KNX objects that linknx interacts with (in the rules) and which can be accessed by the web visualisation [KnxWeb](https://github.com/linknx/knxweb) are defined here.
 
 Here is an example of objects definition section:
 
-&lt;objects&gt;
-      &lt;object type="16.000" id="text_salon" gad="9/1/153" flags="cwtu"&gt;Text on LCD in salon&lt;/object&gt;
-      &lt;/object&gt;
-      &lt;object id="hall_lamps_central" gad="3/2/1" init="request"&gt;Hall central lamp&lt;/object&gt;
-      &lt;object id="hall_lamps_LED" gad="3/2/2" init="request"&gt;Hall LED floor lights&lt;/object&gt;
-      &lt;object id="gate_open" gad="0/1/0" init="request"&gt;&lt;listener gad="4/1/0"/&gt;gate open close&lt;/object&gt;
-      &lt;object id="gate_status" gad="4/1/0" init="request"&gt;gate state status&lt;/object&gt;
-      &lt;object id="salon_scene1" gad="3/2/2" init="persist"&gt;Salon teleconference start scene&lt;/object&gt;
-&lt;/objects&gt;
+```xml
+<objects>
+      <object type="16.000" id="text_salon" gad="9/1/153" flags="cwtu">Text on LCD in salon</object>
+      </object>
+      <object id="hall_lamps_central" gad="3/2/1" init="request">Hall central lamp</object>
+      <object id="hall_lamps_LED" gad="3/2/2" init="request">Hall LED floor lights</object>
+      <object id="gate_open" gad="0/1/0" init="request"><listener gad="4/1/0"/>gate open close</object>
+      <object id="gate_status" gad="4/1/0" init="request">gate state status</object>
+      <object id="salon_scene1" gad="3/2/2" init="persist">Salon teleconference start scene</object>
+</objects>
+```
 
-Since version 0.0.1.25, the object definition uses Datapoint Types defined in KNX standard instead of EIS datatypes.
-The current syntax is described in [Object_Definition_Syntax] section.
+Since version 0.0.1.25, the object definition refers to the Datapoint Types defined in the KNX standard instead of EIS datatypes.
+The current syntax is described in [Objects](Objects) section.
 The deprecated syntax (before 0.0.1.25) is still supported but will be converted to the new one when loaded by the application.
 The old syntax is described in [Object_Definition_Syntax_before_0.0.1.25] section.
-Rules section
 
-Rules section is a place where building automatisation is created. You can define what happens when state of some KNX objects has changed, define actions to be performed during specific time periods etc. It consists of a rules each defining some specific condition and action to be performed when the condition had been met.
+# Rules section
 
-A simplest rule is composed of:
+Rules section is the place where building automation is defined. You can describe what needs to happen when some KNX objects change state, define actions to be performed during specific time periods etc. It consists in a series of rules defining each specific trigger conditions and actions to be performed when triggered.
 
-    one condition
-    an action list to be executed when the condition is evaluated as true
+The simplest rule is made of:
+- one condition
+- an action list to be executed when the condition is evaluated as true
 
-however more complicated scenarios can be created as described in [Rules_section]
+however more complicated scenarios can be created as described in [Rules]
 
 A sample rule:
 
-        &lt;rule id="xxxx"&gt;
-            &lt;condition type="...."&gt;
+```xml
+        <rule id="xxxx">
+            <condition type="....">
                 .....
-            &lt;/condition&gt;
-            &lt;actionlist&gt;
-                &lt;action ..... /&gt;
+            </condition>
+            <actionlist>
+                <action ..... />
                 .....
-            &lt;/actionlist&gt;
-            &lt;actionlist type="on-false"&gt;
-                &lt;action ..... /&gt;
-            &lt;/actionlist&gt;
-        &lt;/rule&gt;
+            </actionlist>
+            <actionlist type="on-false">
+                <action ..... />
+            </actionlist>
+        </rule>
+```
 
-The detailed syntax, and a full list of condition and action types is available on the [Rules_section] page. 
+The detailed syntax, and a full list of condition and action types is available on the [Rules] page. 
