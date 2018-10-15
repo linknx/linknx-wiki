@@ -9,6 +9,7 @@
 * [Logging](Logging)
 * [Services](Services)
 * [Objects](Objects)
+    * [Old syntax (up to 0.0.1.25)](Object-definition-syntax-prior-to-0.0.1.25)
 * [Rules](Rules)
     * [Conditions](Conditions)
     * [Actions](Actions)
