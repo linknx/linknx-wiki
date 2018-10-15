@@ -154,7 +154,7 @@ The optional 'read="true"' attribute states that the object should not fetch its
 + another one to read this actuator's status object
 This is true for most 16 port and 32 port switch actuator devices. So in case of such devices you should always create two separate objects per KNX device, connected by a listener with read="true" option.
 
-#Log
+# Log
 
 The log parameter will cause linknx to dump the changes of the object's value to a file.
 
