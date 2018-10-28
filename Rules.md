@@ -142,4 +142,7 @@ This rule dims the bedroom light up smoothly from 0 to 94% (=240/255) during hal
 
 # Rules on linknx startup
 
-Please note, that some rules are evaluated and triggered when linknx starts up and reads the configuration file while some are not. This can be to some extent controlled by the init=true or init=false attribute. The detailed [Linknx_rules_on_startup] page contains detailed discussion of this topic. 
+Some rules are evaluated and triggered when linknx starts up and reads the configuration file while some are not. This is determined by the value of the *init* attribute:
+- if set to *true* or *false*, this value is used as initial value for the rule and the rule's condition is not evaluated at startup. No rule's action list is executed at that time, no matter what the rule's initial value is.
+- if set to *eval*, no constant value is assumed as initial value. Thus, the rule's condition is evaluated and its result is used as initial state for the rule. If a connection with the KNX bus could not be the rule's initialization is deferred until the connection is ready. If the rule defines *if-true* or *if-false* action lists, the one corresponding to the rule's initial state is then executed.
+
