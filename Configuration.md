@@ -60,7 +60,7 @@ Here is an example of the _services_ section
 
 ```
 
-For a detailed definition of the services and their syntax please refer to the [Services section page](Services-Section).
+For a detailed definition of the services and their syntax please refer to the [Services section page](Services).
 
 # Logging section
 
