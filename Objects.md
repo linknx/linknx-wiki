@@ -1,9 +1,9 @@
 Each object element describes a communication object.
-   + Object definition main parameters
-   + Object type
-   + Flags
-   + Init
-   + Listener (child xml element)
+   + [Object definition main parameters](#object-definition-main-parameters)
+   + [Object type](#object-type)
+   + [Flags](#flags)
+   + [Init](#init)
+   + [Listener (child xml element)](#listener-child-xml-element)
    + [Log](#log)
 
 # Object definition main parameters
