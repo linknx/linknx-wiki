@@ -4,7 +4,7 @@ Each object element describes a communication object.
    + Flags
    + Init
    + Listener (child xml element)
-   + Log
+   + [Log](#log)
 
 # Object definition main parameters
 
