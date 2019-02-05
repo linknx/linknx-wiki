@@ -54,9 +54,9 @@ The ioports element contains a list of IO ports. See [IO_Ports] for more details
 
 The location element defines physical location of KNX installation (latitude (lon) and longitude (lat) in degrees, values have to be negative for south and western hemisphere respectively). This is needed for calculation of sunrise, sunset and noon time specification for conditions etc.
 
-The persistence element defines where linknx stores it's persistent status information and/or logs. Persistence type="file" stores values on the filesystem. The path attribute tells where to store persistent status and the logpath attribute tells where to store object's history logs. By default, path equals /var/lib/linknx/persist and logpath equals to path.
+The persistence element defines where linknx stores its persistent status information and/or logs. Persistence type="file" stores values on the filesystem. The path attribute tells where to store persistent status and the logpath attribute tells where to store objects' history logs. By default, path equals /var/lib/linknx/persist and logpath equals path.
 
-Under this directory, a file with the object id as name will be created for each persistent object (object with attribute init="persist"). This file contains the object's current value.
+Under this directory, a file named the same as the object's id is created for each persistent object (object with attribute init="persist"). This file contains the object's current value.
 
 Under the logpath directory, a file with the object id as name and extension ".log" will be created for each logged object (object with attribute log="true"). This file contains the history of the object in format "yyyy-mm-dd hh:mm:ss > value".
 
