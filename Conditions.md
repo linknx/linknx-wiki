@@ -129,12 +129,11 @@ Example:
 
 In this example the child condition is `<condition type="object" id="Test_Switch1" value="on" trigger="true"/>`
 The behavior can be illustrated as in the diagram below:
+![Simple time counter](Timecounter-simple.png)
 
-[[img src=timecounter-simple.png]] 
-
-The _**time-counter**_ condition can also take short "spikes" into account as follows: The "true"-time is summed up until the "threshold" is reached or the "false" time has reached the "reset-delay". In this case the counting is started over. 
-
-[[img src=timecounter-complex.png]] 
+The `time-counter` is also designed to take short spikes into account. The time the child condition remains true is not measured in one chunk. This time sums up until the value indicated by `threshold` is reached. On the other hand, if the sum of time chunks spent with the child condition being false reaches the duration specified in `reset-delay`, the counter starts over.
+This is illustrated in the diagram below:
+![Advanced time counter](Timecounter-complex.png)
 
 Example scenario for using this type of condition is to set a threshold between the noise detection status coming from a babyphone and the action to trigger. 
     
