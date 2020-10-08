@@ -1,0 +1,157 @@
+# General
+
+The type of condition is determined by the `type` attribute.  
+Supported values for this attribute are:  `and`, `or`, `not`, `object`, `object-compare`, `object-src`, `timer`, `time-counter`, `ioport-rx` and `script`
+
+# Logical Conditions: `and`, `or`, `not`
+
+The only attribute for these is `type`. Conditions of type `and` or `or` can have one or several children conditions, while condition of type `not` can only have one.
+As expected, their behavior is as follows:
+- `and` conditions evaluate to `true` if all child conditions evaluate to `true`.
+- `or` conditions evaluate to `true` if at least one child condition evaluates to `true`.
+- `not` conditions negates their child condition. As a consequence, they evaluate to `true` if and only if the child condition evaluates to `false`.
+
+# Timer Conditions
+
+The only attribute – optional – for this type of condition is `trigger`. Its value is either `true` or `false` and it defaults to `false`.
+Setting the `trigger` attribute to `true` forces the rule to assess its top-level condition whenever the value of the timer condition changes. In other words, with `trigger` set to true, the status of the rule may change immediately upon a change of the timer condition. On the contrary, setting it to `false` does not force the rule to refresh its status after the sole change of the timer condition.
+  
+This type of condition is defined by means of its children elements. They can be:
+- `at`
+- `every`
+- `until`
+- `during`
+
+Elements `at` and `every` are mutually exclusive. One of the two **must** be present for the condition to be valid.
+Elements `until` and `during` are mutually exclusive. Their presence is optional.
+For details about attributes for `at` and `until`, please refer to section about the [time specification](TimeSpec) section.
+Elements `every` and `during` cannot have attributes. Their internal text value defines a period of time in seconds.  
+At the time specified by `at` or time interval specified by `every` , the timer condition evaluates to `true`.
+When the time specified by `until` is reached or when the time duration specified by `during` is expired, the timer condition evaluates to `false`.
+If neither `until` nor `during` are specified, the timer condition expires instantaneously. That means that when scheduling constraints are met, the timer condition briefly evaluates to `true`, causing the rule to re-evaluate if `trigger` is `true` and immediately resets to `false`.
+Please note that you can force the timer condition to remain `false` on exception days, by setting `exception="no"`. Exception days requiring special treatment are defined in the [services](Services) section.
+
+## Comments
+
+* Please note that you can use a combination of timer conditions where some are used to trigger evaluation at a given time while others are define the general timeframe when a condition can be valid.
+The example below illustrates this feature with a condition that should trigger every day at 8:00 AM in the period ranging from mid-September to mid-March.
+```xml
+<condition type="and">
+    <condition type="timer">
+        <at day="15" month="9" hour="0" min="0"/>
+        <until day="15" month="3" hour="0" min="0"/>
+    </condition>
+    <condition type="timer" trigger="true">
+        <at hour="8" min="0"/>
+    </condition>
+</condition>
+```
+
+* Any parts of the time specification can be omitted. For example, the condition below evaluates to `true` every day of February because it does not define any constraint on the day of month: 
+
+```xml        
+<condition type="timer" trigger="true">
+    <at hour="8" min="12" month="2" exception="no"/>
+</condition>
+```
+
+# Object Conditions
+
+Like [timer conditions](#Timer-Conditions), object conditions have an optional `trigger` boolean attribute which defaults to `false`.
+
+If _**trigger**_ is true, a change in the object value will force the rule to re-evaluate it's condition.  
+Attribute _**id**_ says which object is monitored by this condition. Attribute _**value**_ contains the reference value for the comparison.  
+Optional attribute _**op**_ specifies the comparison operator, default value is _**eq**_, the supported values are: 
+
+  * _**eq**_&nbsp;: object value equals reference value 
+  * _**lt**_&nbsp;: object value is less than reference value 
+  * _**gt**_&nbsp;: object value is greater than reference value 
+  * _**ne**_&nbsp;: object value is not equal to reference value 
+  * _**lte**_&nbsp;: object value is less than or equal to reference value 
+  * _**gte**_&nbsp;: object value is greater than or equal to reference value 
+
+
+    <condition type="object" id="light_level" value="12" op="lt" />
+
+## Object-src condition:
+
+Similar to _**object**_ condition, but with an additional _**src**_ attribute specifying a device's physical address (e.g. 1.1.20) and evaluating to true only if the object condition is true and the last group telegram received for the configured group object was coming from the device specified by _**src**_ attribute. 
+
+## Object-compare condition:
+
+Similar to _**object**_ condition, but with the _**value**_ attribute replaced by _**id2**_ which is the id of a second object for the comparison.  
+Sample (true if value of temp_salon is less than value of consigne_temp_salon):  
+
+    
+    
+    <condition type="object-compare" id="temp_salon"
+    id2="consigne_temp_salon" op="lt" />
+    
+
+The comparison can only take place between objects of the same type or of "compatible" types.  
+Some groups of compatible types are:  
+
+
+  * 9.xxx and 14.xxx (floating point 16 and 32bit)  
+
+  * 5.xxx, 5.001, 5.003, 20.102, 7.xxx and 12.xxx (they all use an unsigned integer value internally)  
+
+  * 6.xxx, 8.xxx and 13.xxx (all use a signed integer value; 29.xxx is not compatible because it uses a 64bit integer)  
+
+  * 16.000 and 28.001 (character strings)  
+
+
+## Time-Counter condition:
+
+Since version 0.0.1.25 a time-counter condition has been introduced to support timers, which are more flexible than just using the "delay" in actions. A _**time-counter**_ condition has 2 attributes: 
+
+  * _**threshold**_
+  * _**reset-delay**_
+
+and a "child-condition". If the child-condition stays true for the _**threshold**_ time, the _**time-counter**_ condition evaluates to TRUE and<actionlist>...</actionlist> is executed. If the child-conditions switches from TRUE to FALSE, then after _**reset-delay**_ the _**time-counter**_ condition switches to FALSE and the <actionlist type="on-false">...</actionlist> is executed. 
+
+Sample: 
+    
+    
+        <objects>
+          <object id="Test_Switch1" gad="10/5/15" type="1.001" flags="cwtus">Test_Switch1</object>
+          <object id="Test_Switch2" gad="10/5/16" type="1.001" flags="cwtus">Test_Switch2</object>
+        </objects>
+        <rules>
+          <rule id="TestTimer">
+            <condition type="time-counter" threshold="6" reset-delay="4" >
+               <condition type="object" id="Test_Switch1" value="on" trigger="true" />
+            </condition>
+            <actionlist>
+                <action type="set-value" id="Test_Switch2" value="on" />
+            </actionlist>
+            <actionlist type="on-false">
+                <action type="set-value" id="Test_Switch2" value="off" />
+            </actionlist>
+          </rule>
+        </rules>
+    
+
+In the example above the child-condition is 
+    
+    <condition type="object" id="Test_Switch1" value="on" trigger="true" />
+
+In a diagram the behaviour can be shown like this: 
+
+[[img src=timecounter-simple.png]] 
+
+The _**time-counter**_ condition can also take short "spikes" into account as follows: The "true"-time is summed up until the "threshold" is reached or the "false" time has reached the "reset-delay". In this case the counting is started over. 
+
+[[img src=timecounter-complex.png]] 
+
+Example scenario for using this type of condition is to set a threshold between the noise detection status coming from a babyphone and the action to trigger. 
+    
+    <condition type="time-counter" threshold="15" reset-delay="5m">
+    
+    	<condition type="object" id="babyphone" value="on" trigger="true" />
+    
+    </condition>
+
+The condition is true if the babyphone detects noise for at least 15 seconds altogether. If no noise is seen for 5 minutes, the counter is reset.  
+  
+Another use can be determining between short and long button presses if you want to use wall buttons which do not support short and long presses natively (for instance BIQ switches without temperature control). You can programm the button for blinds control and calculate the time during which the button value is "1" or "9" (pressed) where the value "0" can be used to reset the counter. And then use this to switch two different lights instead of blinds control. 
