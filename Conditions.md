@@ -57,6 +57,93 @@ The example below illustrates this feature with a condition that should trigger 
 
 # Object Conditions
 
-Like [timer conditions](#Timer-Conditions), object conditions have an optional `trigger` boolean attribute which defaults to `false`.
+Object conditions have an optional `trigger` boolean attribute which defaults to `false` and whose role is the same as the `trigger` attribute for [timer conditions](#Timer-Conditions).
 
-TO BE CONTINUED, read further on [the sourceforge wiki](https://sourceforge.net/p/linknx/wiki/Condition%27s_Syntax/).
+The state of an object condition depends on the value of the object whose identifier matches the value of the `id` attribute. The value of this object is compared to the value provided in the attribute `value`. The value of the `op` attribute defines the type of comparison operator which tells how the `value` of the condition is compared with the current value of the targeted object:
+* `eq` (default): evaluates to true when the object value is equal to the condition value 
+* `lt`: evaluates to true when the object value is less than the condition value 
+* `gt`: evaluates to true when the object value is greater than the condition value 
+* `ne`: evaluates to true when the object value is not equal to the condition value 
+* `lte`: evaluates to true when the object value is less than or equal to the condition value 
+* `gte`: evaluates to true when the object value is greater than or equal to the condition value 
+
+Example:
+```xml
+<condition type="object" id="light_level" value="12" op="lt"/>
+```
+
+# Object-src Conditions
+
+This type of condition extends the behavior of [object conditions](#Object-Conditions) with a `src` attribute specifying a device's physical address (e.g. 1.1.20). For the object-src condition to evaluate to true, both conditions must be met:
+- the object condition is true
+- the last group telegram received for the configured group object was coming from the device holding the address specified in the `src` attribute 
+
+# Object-compare Conditions
+
+This type of condition extends the behavior of [object conditions](#Object-Conditions). Instead of using a constant value defined in a `value` attribute, object-src conditions takes its reference value from a second object. That is why the `value` attribute is replaced with an `id2` attribute holding the identifier of a second object whose value is used as reference for the comparison.
+
+Example of a condition evaluating to true when the value of `living_room_temp` is less than the value of `living_room_set_temp`:
+```xml   
+<condition type="object-compare" id="living_room_temp" id2="living_room_set_temp" op="lt"/>
+```
+
+## Restrictions
+Objects referred to with `id` and `id2` must provide comparable values. As a consequence, the types of the two objects must be compatible.
+Supported associations of types are:  
+- 9.xxx and 14.xxx (floating point 16 and 32bit)  
+- 5.xxx, 5.001, 5.003, 20.102, 7.xxx and 12.xxx (these types all internally rely on an unsigned integer)
+- 6.xxx, 8.xxx and 13.xxx (these types all internally rely on a signed integer value; 29.xxx is not compatible because it uses a 64 bit integer)  
+- 16.000 and 28.001 (those represent strings of characters)
+
+# Time-Counter Conditions (from version 0.0.1.25 onwards)
+
+In addition to [simple timer conditions](Timer-Conditions) and to the `delay` attribute in [actions](Actions), `time-counter` conditions are a flexible way of defining rich time-based conditions.
+Its definition consists of:
+- a `threshold` attribute
+- a `reset-delay` attribute
+- a child element of type `condition`
+
+The state of a `time-counter` condition depends on the state of its child condition`. It evaluates to `true` once the child condition has remained `true` for a `threshold` period of time.
+Once the child condition has remained `false` for a `reset-delay` period of time, the state of the condition switches back to `false.
+
+Example:
+```xml   
+<objects>
+	<object id="Test_Switch1" gad="10/5/15" type="1.001" flags="cwtus">Test_Switch1</object>
+	<object id="Test_Switch2" gad="10/5/16" type="1.001" flags="cwtus">Test_Switch2</object>
+</objects>
+<rules>
+	<rule id="TestTimer">
+		<condition type="time-counter" threshold="6" reset-delay="4">
+			<condition type="object" id="Test_Switch1" value="on" trigger="true"/>
+		</condition>
+		<actionlist>
+			<action type="set-value" id="Test_Switch2" value="on"/>
+		</actionlist>
+		<actionlist type="on-false">
+			<action type="set-value" id="Test_Switch2" value="off"/>
+		</actionlist>
+	</rule>
+</rules>
+``` 
+
+In this example the child condition is `<condition type="object" id="Test_Switch1" value="on" trigger="true"/>`
+The behavior can be illustrated as in the diagram below:
+
+[[img src=timecounter-simple.png]] 
+
+The _**time-counter**_ condition can also take short "spikes" into account as follows: The "true"-time is summed up until the "threshold" is reached or the "false" time has reached the "reset-delay". In this case the counting is started over. 
+
+[[img src=timecounter-complex.png]] 
+
+Example scenario for using this type of condition is to set a threshold between the noise detection status coming from a babyphone and the action to trigger. 
+    
+    <condition type="time-counter" threshold="15" reset-delay="5m">
+    
+    	<condition type="object" id="babyphone" value="on" trigger="true" />
+    
+    </condition>
+
+The condition is true if the babyphone detects noise for at least 15 seconds altogether. If no noise is seen for 5 minutes, the counter is reset.  
+  
+Another use can be determining between short and long button presses if you want to use wall buttons which do not support short and long presses natively (for instance BIQ switches without temperature control). You can programm the button for blinds control and calculate the time during which the button value is "1" or "9" (pressed) where the value "0" can be used to reset the counter. And then use this to switch two different lights instead of blinds control. 
