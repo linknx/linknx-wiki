@@ -103,7 +103,7 @@ Its definition consists of:
 - a `reset-delay` attribute
 - a child element of type `condition`
 
-The state of a `time-counter` condition depends on the state of its child condition`. It evaluates to `true` once the child condition has remained `true` for a `threshold` period of time.
+The state of a `time-counter` condition depends on the state of its child condition. It evaluates to `true` once the child condition has remained `true` for a `threshold` period of time.
 Once the child condition has remained `false` for a `reset-delay` period of time, the state of the condition switches back to `false.
 
 Example:
