@@ -46,64 +46,87 @@ Example:
 
 When executed, the action assigns the object referred to by the `id` attribute a constant value defined by the `value` attribute
 
-### Example:
+## Example:
 ```xml
 <action type="set-value" id="kitchen_heating" value="comfort"/>
 ```
 This action sets the value of the object `kitchen_heating` to the string value `comfort`.
 
-## copy-value
+# copy-value
 
 This action assigns an object the value from a reference object. During the assignment process, the reference value is first converted to a string and then converted again to the type of the targeted object. Doing so, it is for example possible to copy an 8-bit integer value to a floating point object or to a string object.
 
-### Example    
+## Example    
 ```xml
 <action type="copy-value" from="heating_mode" to="prev_heating_mode"/>
 ```
 
-## toggle-value
+# toggle-value
 
-This action can be used for binary objects and is switching object's value between "on" and "off" once. 
-    
+This action is able to work with binary objects only. If the object has a value set to `on`, the action switches it to `off` and vice versa.
+
+## Example    
+```xml
+<action type="toggle-value" id="door_light"/>
+```
+
+# set-string
+
+This action sets the value of a targeted string object using a predefined format. The format can mix constant string portions with references to other objects using the pattern `${obj_id}`. When the action is executed, such reference is  replaced with the current value of the object which identifier is `obj_id`.
+
+## Example    
+```xml
+<action type="set-string" id="lcd_text" value="T° ext: ${ext_temp}°C"/>
+```
+
+# send-read-request
+
+This action sends a read request to a group address on the KNX bus. This is useful to compensate for objects that do not transmit their actual value periodically. This action forces the KNX device with "read" flag set in the targeted group to reply with a read response containing the current value of the group. If the object has the "update" flag set, it will update its internal value with one provided in the KNX response telegram.
+
+## Example    
+```xml
+<action type="send-read-request" id="gas_counter_value"/>
+```
+
+# cycle-on-off
+
+This type of action cyclically toggles the value of a targeted binary object identified with the value of the `id` attribute, following the algorithm below:
+- set the value to `on`
+- pause for a time span defined by the `on` attribute
+- set the value to `off`
+- pause for a time span defined by the `off` attribute
+- start this cycle over, until `count` cycles have been executed
+
+As a consequence, the first cycle starts off by setting the object to `on`. The last cycle ends with setting the object to `off`.
+
+An optional `<stopcondition/>` child element can be used to abort the cycles if the condition is met before `count` is reached. The syntax of this condition follows the principles of [any regular condition](Conditions) for actions.  
+
+## Example
+```xml
+<action type="cycle-on-off" id="closet_lights" on="5" off="5" count="10">
+    <stopcondition type="object" id="cancel-blinking" value="on"/>
+</action>
+```
+
+# repeat
+
+Version 0.0.1.28 introduced the ability to repeat a series of actions for a predefined number of cycles. By default, actions in the list are executed all at once, but it is easy to leverage the standard `delay` attribute common to all types of actions to create a sequence of actions.
+
+This type of action is defined as follows:
+- a `period` attribute defines the pause in seconds between repetitions
+- a `count` attribute defines the total number of repetitions to execute
+- one or several `<action/>` child elements to execute cyclically
+
+## Example
+```xml    
+<action type="repeat" period="2" count="3">
     <action type="toggle-value" id="door_light"/>
+    <action type="toggle-value" id="door_light" delay="500ms"/>
+</action>
+```
 
-## set-string
-
-This action can set an object's value using a character string. The following pattern ${_obj_id_} will be replaced by the actual value of object _obj_id_ when the action is executed. 
-    
-    <action type="set-string" id="lcd_text" value="T° ext: ${ext_temp}°C" />
-
-## send-read-request
-
-This action can send a read request on the KNX bus. This is useful with objects that don't transmit their actual value periodically. This action will force the KNX device that has the "read" flag set in ETS to reply with a read response containing the actual value. If the linknx object has the "update" flag set, it will update its internal value with the received one. 
-    
-    <action type="send-read-request" id="gas_counter_value">
-
-## cycle-on-off
-
-Attribute _**id**_ reffering to the object to switch on and off.  
-Attributes _**on**_ and _**off**_ defining the delay in seconds for on and off states.  
-Attribute _**count**_ defining the number of on/off cycles to perform.  
-An optional _**stopcondition**_ child element to abort the cycle when the condition is met. See [Condition's_Syntax] for details.  
-**Example**
-    
-    <action type="cycle-on-off" id="closet_lights" on="5" off="5" count="10">
-
-Please note that each cycle begins with switching the object to _**on**_ and ends with switching it to _**off**_. In result this action is always leaving the object finally in an "off" state. 
-
-## repeat
-
-Since version 1.28 there is a possibility to create a simple repetition loop that repeats a list of actions periodically a predefined number of times. All actions in the list are started at the same time, but you can delay some of them using the delay="x" parameter like on any action. 
-
-Attribute _**period**_ defining the delay in seconds between repetitions.  
-Attribute _**count**_ defining the number of repetitions to perform.  
-One or more _**action**_ child elements to execute _**count**_ times every _**period**_.  
-**Example**
-    
-    &lt;action type="repeat" period="2" count="3"&gt;
-         &lt;action type="toggle-value" id="door_light"/&gt;
-         &lt;action type="toggle-value" id="door_light" delay="500ms"/&gt;
-    &lt;/action&gt;
+***
+THE TEXT BELOW NEEDS REVIEW
 
 ## conditional
 
