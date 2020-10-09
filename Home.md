@@ -1,3 +1,4 @@
-Welcome to the linknx wiki!
+Welcome to the LinKNX wiki! Use the navigation panel on the right to choose a section.
 
-Disclaimer: this site is aimed at becoming the new reference for linknx's documentation. But as of now, it has not been fully migrated yet. If you do not find the information you need or find it inaccurate, check out the [legacy one on Sourceforge](https://sourceforge.net/p/linknx/wiki/Main_Page/).
+This site is aimed at becoming the new reference for the documentation, replacing the legacy wiki hosted on [SourceForge](https://sourceforge.net/p/linknx/wiki/Main_Page/). As of October 2020, most of its content has been migrated and reworked, but pieces of it are yet to be moved. If you do not find the information you need, feel free to continue to search the wiki on SourceForge.
+And should you find anything imprecise or inaccurate, feel free to open an issue to let us know!
