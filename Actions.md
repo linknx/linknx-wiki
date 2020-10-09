@@ -28,15 +28,21 @@ All actions can define an optional `delay` attribute defining the timespan that 
 - `s` for seconds – this is the default unit if none is given
 - `ms` for milliseconds – from 0.0.1.28 onwards
 
+`send-sms`, `set-string`, `send-email`, `shell-cmd` and `ioport` actions can be parameterized with the value of one or several objects. To do so, their `var` attribute must be set to true to mark them as being parameterizable.
+Then, some of their attributes can refer to object values by inserting object labels following the convention `${id_of_the_object}`. This applies to the following attributes:
+- for `send-sms` actions: `id` and `value`
+- for `set-string` actions: `value`
+- for `send-email` actions: `to`, `subject` and `text`
+- for `shell-cmd` actions: `cmd`
+- for `ioport-tx` actions: `data`
+
+Example:
+```xml
+<action type="ioport-tx" data="pl A1 xdim ${id_of_the_object}" ioport="X10" var="true"/>
+```
 
 ***
-
 THE TEXT BELOW NEEDS REVIEW
-
-We can use an object in some actions like for sms, email or ioport for send his value.  
-you have to had the parameter var="true" and in "data" add the object like this&nbsp;: ${id_of_the_object}  
-ex.&nbsp;: &lt;action type="ioport-tx" data="pl A1 xdim ${id_of_the_object}" ioport="X10" var="true"&gt;&lt;/action&gt;   
-
 
 ## set-value
 
