@@ -1,7 +1,7 @@
 # General
 
-The type of the action is determined by the `type` attribute.  
-Supported values for this attribute are:
+The type and behavior of the action is determined by the `type` attribute.  
+Supported values for this type are:
 - `set-value`
 - `copy-value`
 - `toggle-value`
@@ -21,7 +21,8 @@ Supported values for this attribute are:
 - `script`
 - `cancel` 
 
-All actions can define an optional `delay` attribute defining the timespan that must elapse before the action is actually executed once it is triggered. The value is a number, optionally followed by a unit which is one of:
+Each type comes with its own set of attributes. See below for more details about each type of action.
+But all actions have an optional `delay` attribute defining the time span that must elapse before the action is actually executed once it is triggered. The value is a number, optionally followed by a unit which is one of:
 - `d` for days
 - `h` for hours
 - `m` for minutes
@@ -41,21 +42,24 @@ Example:
 <action type="ioport-tx" data="pl A1 xdim ${id_of_the_object}" ioport="X10" var="true"/>
 ```
 
-***
-THE TEXT BELOW NEEDS REVIEW
+# set-value
 
-## set-value
+When executed, the action assigns the object referred to by the `id` attribute a constant value defined by the `value` attribute
 
-The value defined by the _**value**_ attribute will be assigned to the object referred to by the _**id**_ attribute.  
-**Example**
-    
-    <action type="set-value" id="kitchen_heating" value="comfort" />
+### Example:
+```xml
+<action type="set-value" id="kitchen_heating" value="comfort"/>
+```
+This action sets the value of the object `kitchen_heating` to the string value `comfort`.
 
 ## copy-value
 
-This action can be used to copy an object's value to another object. The copy converts the value to a string then converts the string to the target object's value. This allows for example to copy an 8bit integer value into a floating point object or to a string object. 
-    
-    <action type="copy-value" from="heating_mode" to="prev_heating_mode"/>
+This action assigns an object the value from a reference object. During the assignment process, the reference value is first converted to a string and then converted again to the type of the targeted object. Doing so, it is for example possible to copy an 8-bit integer value to a floating point object or to a string object.
+
+### Example    
+```xml
+<action type="copy-value" from="heating_mode" to="prev_heating_mode"/>
+```
 
 ## toggle-value
 
