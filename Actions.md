@@ -3,23 +3,23 @@
 The type and behavior of the action is determined by the `type` attribute.  
 Supported values for this type are:
 - [set-value](#set-value)
-- [[copy-value|copy-value]]
-- [[toggle-value]]
-- `set-string`
-- `send-read-request`
-- `cycle-on-off`
-- `repeat`
-- `conditional`
-- `start-actionlist`
-- `formula`
-- `set-rule-active`
-- `send-sms`
-- `send-email`
-- `dim-up`
-- `shell-cmd`
-- `ioport-tx`
-- `script`
-- `cancel` 
+- [copy-value](#copy-value)
+- [toggle-value](#toggle-value)
+- [set-string](#set-string)
+- [send-read-request](#send-read-request)
+- [cycle-on-off](#cycle-on-off)
+- [repeat](#repeat)
+- [conditional](#conditional)
+- [start-actionlist](#start-actionlist)
+- [formula](#formula)
+- [set-rule-active](#set-rule-active)
+- [send-sms](#send-sms)
+- [send-email](#send-email)
+- [dim-up](#dim-up)
+- [shell-cmd](#shell-cmd)
+- [ioport-tx](#ioport-tx)
+- [script](#script)
+- [cancel](#cancel)
 
 Each type comes with its own set of attributes. See below for more details about each type of action.
 But all actions have an optional `delay` attribute defining the time span that must elapse before the action is actually executed once it is triggered. The value is a number, optionally followed by a unit which is one of:
