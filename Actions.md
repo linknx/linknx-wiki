@@ -186,14 +186,26 @@ This type of action enables or disables a targeted rule. This action is defined 
 - `rule-id` contains the identifier of the rule to control
 - `active` is an optional parameter telling whether the rule should be disabled rather than enabled. When equal to one of `no`, `false` or `off`, the targeted rule is disabled. Otherwise it is enabled (this is the default behavior).
 
+## Note
+
+Disabling a rule does not cancel any of its currently running actions. It only _prevents_ the rule from triggering new action executions.
+Similarly, enabling a disabled rule does not necessarily trigger any of its actions. It only _allows_ the rule to execute actions if its usual criteria based on its condition and its optional trigger are met.
+
 ## Example
 
+Action disabling the `flashing_lights` rule, so that it cannot execute any of its actions anymore:
 ```xml
 <action type="set-rule-active" active="no" rule-id="flashing_lights"/>
 ```
-    
-    &lt;action type="set-rule-active" active="yes" rule-id="flashing_lights" /&gt;
-    
+
+Action enabling the `flashing_lights` rule, so that it becomes ready to execute its actions again:
+```xml    
+<action type="set-rule-active" active="yes" rule-id="flashing_lights"/>
+```
+
+***
+THE TEXT BELOW NEEDS REVIEW
+
 
 ## cancel
 
