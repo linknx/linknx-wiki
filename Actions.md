@@ -2,8 +2,8 @@
 
 The type and behavior of the action is determined by the `type` attribute.  
 Supported values for this type are:
-- [[set-value]]
-- [[copy-value]]
+- [set-value](#set-value)
+- [[copy-value|copy-value]]
 - [[toggle-value]]
 - `set-string`
 - `send-read-request`
