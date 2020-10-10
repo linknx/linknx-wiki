@@ -125,60 +125,72 @@ This type of action is defined as follows:
 </action>
 ```
 
-***
-THE TEXT BELOW NEEDS REVIEW
+# conditional
 
-## conditional
+When executed, this type of action executes one or several child actions if a condition is met. Otherwise, child actions are not executed.
+The condition is defined in a `<condition/>` child element, as per the [condition syntax](Conditions).
+The actions are defined as `<action/>` child elements.
 
-One _**condition**_ child elements that is evaluated when the action is executed.  
-One or more _**action**_ child elements to execute if condition above is true.  
-**Example**
-    
-    &lt;action type="conditional"&gt;
-      &lt;condition type="object" id="alarm_email_enabled" value="on" /&gt;
-      &lt;action type="send-email"  to="help@example.com" subject="Foreign contaminant"&gt;Intrusion in your shrubbery!&lt;/action&gt;
-    &lt;/action&gt;
-
+## Example
+```xml    
+<action type="conditional">
+    <condition type="object" id="alarm_email_enabled" value="on"/>
+    <action type="send-email"  to="help@example.com" subject="Foreign contaminant">Intrusion in your shrubbery!</action>
+</action>
+```
   
-The condition doesn't allow use of _**trigger**_ attribute because the evaluation is triggered by the action execution.  
-If parameter _**delay**_ is added to the &lt;action type="conditional"&gt; tag, the condition will be evaluated after the delay has elapsed. 
+Note: The condition element does not support the usual `trigger` attribute because the evaluation of child actions is always triggered as a consequence of the `conditional` action. The `trigger` attribute would not make sense in that context.
+If a `delay` is set to `<action type="conditional"/>` element, the condition is assessed when the delay has expired.
 
-## start-actionlist
+# start-actionlist
 
-This special action can be used to force execution of the complete actionlist from a given rule. **Example**
-    
-    &lt;action type="start-actionlist" list="true" rule-id="flashing_lights" /&gt;
+This action forces execution of the actions defined in the `<actionlist/>` of a targeted rule, just as if those actions were children of the `start-actionlist` action.
 
-execute actions "if-true" or "on-true" of the rule, or: 
-    
-    &lt;action type="start-actionlist" list="false" rule-id="flashing_lights" /&gt;
+This action is defined via two attributes:
+- `rule-id` contains the identifier of the rule whose actions are to be executed when this action is executed
+- `list` contains a value that tells which action lists of the targeted rule are executed. It accepts one of the following two values:
+    * `true` to execute action lists `on-true` and `if-true`. This is the default.
+    * `false` to execute action lists `on-false` and `if-false`
 
-to execute actions "if-false" or "on-false" of the rule 
+## Example
 
-## formula
+Action which executes actions `if-true` **and** `on-true` of the rule `flashing_lights`. 
+```xml    
+<action type="start-actionlist" list="true" rule-id="flashing_lights"/>
+```
 
-Can be used to compute a value based on formula a*xm+b*yn+c. 
+Action which executes actions `if-false` **and** `on-false` of the rule `flashing_lights`. 
+```xml    
+<action type="start-actionlist" list="false" rule-id="flashing_lights"/>
+```
 
-  * _x_ and _y_ are optional. If provided, they need to refer to a valid object. 
-  * _a_, _b_ and _c_ are optional, too. They need to be valid (floating) numbers. The defaults for _a_ and _b_ are 1.0, the default value for _c_ is 0. 
-  * _m_ and _n_ are optional, too. They need to be valid (floating) numbers. The defaults for both are 1.0. 
+# formula
 
-The result will be written to the _id_. 
+This type of action evaluates a formula and sets a targeted numerical object value to the computed result. The formula is of the form `a*X^m + b*Y^n + c`, with:
+- `X` and `Y` being values of objects, evaluated at execution time. Those two objects are referenced with their identifiers provided by the optional attributes `x` and `y`. If `x`(resp. `y`) is undefined, `X`(resp. `Y`) is set to zero.
+- `a`, `b` and `c` are optional floating point constant numbers provided by their homonymous attributes. Constants `a` and `b` default to `1.0` and `c` default to `0.0`.
+- `m` and `n` are optional floating point power exponents whose values are provided by their homonymous attributes. Their default value is `1.0`.
 
-#### Example
-    
-    &lt;action type="formula" id="object_id_result" n="1.0" m="2.0" c="3.0" b="4.0" a="5.0" y="object_id_y" x="object_id_x" &gt;&lt;/action&gt;
+The object which is assigned the computation result is referenced with its identifier stored in the `id` attribute.
 
-Formula&nbsp;: id=a*x^m+b*y^n+c =&gt; object_id_result = 5*object_id_x^2+4*object_id_y^1+3 
+## Example
 
-## set-rule-active
+The action representing the pseudo formula `id = a*x^m + b*y^n + c` => `object_id_result = 5*object_id_x^2 + 4*object_id_y^1 + 3` is defined with:
+```xml
+<action type="formula" id="object_id_result" n="1.0" m="2.0" c="3.0" b="4.0" a="5.0" y="object_id_y" x="object_id_x"/>
+```
 
-Can be used to to enable or disable (with optional parameter _active_ set to 'no') a given _rule-id_. 
+# set-rule-active
 
-  
-**Example**
-    
-    &lt;action type="set-rule-active" active="no" rule-id="flashing_lights" /&gt;
+This type of action enables or disables a targeted rule. This action is defined with the following attributes:
+- `rule-id` contains the identifier of the rule to control
+- `active` is an optional parameter telling whether the rule should be disabled rather than enabled. When equal to one of `no`, `false` or `off`, the targeted rule is disabled. Otherwise it is enabled (this is the default behavior).
+
+## Example
+
+```xml
+<action type="set-rule-active" active="no" rule-id="flashing_lights"/>
+```
     
     &lt;action type="set-rule-active" active="yes" rule-id="flashing_lights" /&gt;
     
