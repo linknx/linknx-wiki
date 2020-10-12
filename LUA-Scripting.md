@@ -5,28 +5,28 @@ Since version 0.0.1.26, Lua scripting has been introduced.
 
 Lua script is very simple and lightweight. Have a look at the [Lua 5.1 reference manual](http://www.lua.org/manual/5.1/) for further info. 
 
-[TOC]
-
 ## Condition
 
 A script condition is a LUA script that is executed when the rule is evaluated. The return value is interpreted as a boolean. 
-    
-    &lt;condition type="script"&gt;
+```xml
+<condition type="script">
     return tonumber(obj("setpoint_room1")) &gt; tonumber(obj("temp_room1"));
-    &lt;/condition&gt;
+</condition>
+```
 
 In versions before 0.0.1.28, the condition is evaluated twice. So be careful if you reuse variables from one execution to the next one, or if you display some text with lua print function, it will be executed twice. This bug is corrected since 0.0.1.28. 
 
 ## Action
 
 A script action is a LUA script that is executed when the action is executed. 
-    
-    &lt;action type="script"&gt;
+```xml    
+<action type="script">
     delta = obj("setpoint_room1")-obj("temp_room1");
     value = math.min(math.max(100*delta, 255),0);
     print ("value = ", value);
     set("heat_room1", value);
-    &lt;/action&gt;
+</action>
+```
 
 ## LUA functions
 
