@@ -7,12 +7,13 @@ Since version 0.0.1.26, IO Ports support has been introduced. Support for serial
 
 The configuration of io ports is located in the _**services**_ section. Each IO port has an identifier that can be used in conditions and actions to send and receive data over it.  
 Here's an example of ioports configuration: 
-    
-    &lt;ioports&gt;
-        &lt;ioport id="irtrans" host="192.168.0.18" port="21000" rxport="21001" /&gt;
-        &lt;ioport id="test-tcpcli" type="tcp" host="127.0.0.1" port="1030" /&gt;
-        &lt;ioport id="test-serial" type="serial" dev="/dev/ttyS0" speed="9600" framing="8E1" /&gt;
-    &lt;/ioports&gt;
+```xml    
+<ioports>
+    <ioport id="irtrans" host="192.168.0.18" port="21000" rxport="21001"/>
+    <ioport id="test-tcpcli" type="tcp" host="127.0.0.1" port="1030"/>
+    <ioport id="test-serial" type="serial" dev="/dev/ttyS0" speed="9600" framing="8E1"/>
+</ioports>
+```
 
 The supported parameters are: 
 
@@ -60,14 +61,15 @@ These are the attributes for action type="ioport-tx".
 ## Example
 
 Here's an example of rule that receives a message corresponding to an IR code from IRtrans infrared receiver/transmitter and send a sequence of ir commands to another device (use the red teletext button to power-on dvd player and play a dvd): 
-    
-            &lt;rule id="start-dvd"&gt;
-                &lt;condition type="ioport-rx" expected="samsung,red" ioport="irtrans" trigger="true"/&gt;
-                &lt;actionlist&gt;
-                    &lt;action type="ioport-tx" ioport="irtrans" data="snd dvd,power" /&gt;
-                    &lt;action type="ioport-tx" ioport="irtrans" data="snd dvd,menu" delay="5"/&gt;
-                    &lt;action type="ioport-tx" ioport="irtrans" data="snd dvd,enter" delay="7"/&gt;
-                &lt;/actionlist&gt;
-            &lt;/rule&gt;
+```xml    
+<rule id="start-dvd">
+    <condition type="ioport-rx" expected="samsung,red" ioport="irtrans" trigger="true"/>
+    <actionlist>
+        <action type="ioport-tx" ioport="irtrans" data="snd dvd,power"/>
+        <action type="ioport-tx" ioport="irtrans" data="snd dvd,menu" delay="5"/>
+        <action type="ioport-tx" ioport="irtrans" data="snd dvd,enter" delay="7"/>
+    </actionlist>
+</rule>
+```
 
 There is currently a limitation on _**ioport-rx**_ conditions. Any message received and starting with the value of parameter _**expected**_ will trigger the condition. So in this case if the irtrans could send a message like "samsung,redisplay", it would also trigger the rule. 
