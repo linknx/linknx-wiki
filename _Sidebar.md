@@ -15,3 +15,6 @@
     * [Actions](Actions)
     * [TimeSpec](TimeSpec)
 
+[Integration with Other Tools](Integration)
+* [XML Protocol](Xml-Protocol)
+* [IO Ports](IO-Ports)
