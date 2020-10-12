@@ -232,32 +232,35 @@ Additionally, the `var` attribute can be set to `true` (`false` is the default) 
 <action type="send-sms"  id="32494123456" value="Foreign contaminant"/>
 ```
 
-***
-THE TEXT BELOW NEEDS REVIEW
+# send-email
 
-## send-email
+This action sends an email via the email server configuration defined in the [services](Services) section. It is defined as follows:
+- its `to` attribute contains the recipient's email address
+- its `subject` attribute provides the subject line of the email
+- the text of the XML element contains the body of the message
 
-Attribute _**to**_ defines the e-mail's recipient.  
-Attribute _**subject**_ defines the message subject.  
-Element's text defines the e-mail body.  
-**Example**
-    
-    &lt;action type="send-email"  to="help@example.com" subject="Foreign contaminant"&gt;Intrusion in your shrubbery!&lt;/action&gt;
+## Example
+```xml    
+<action type="send-email" to="help@example.com" subject="Foreign contaminant">Intrusion in your shrubbery!</action>
+```
 
-  
+# dim-up
 
+This action drives the value of a scaling object (5.xxx, EIS6), up or down, starting at a set initial value until it reaches a final value. The variation is linear and spans over a defined duration.
 
-## dim-up
+The action can make the value go **up** (start < end) as well as **dim** it (start > end). The increments in value are sent at a maximum rate of twice per second. Depending on the relative orders of magnitude of the value and time spans, increments can be sent at a much lower rate (if duration is long and the value difference is short, for example).
 
-Attribute _**id**_ refers to the dimmer value object to control. This object must be a scaling object (5.xxx, EIS6)  
-Attributes _**start**_ and _**stop**_ define the dimming value (between 0 and 255) of starting and end point.  
-Attribute _**duration**_ defines the number of seconds elapsed between starting and end point.  
-**Example**
-    
-    &lt;action type="dim-up" id="dim_value_kitchen" start="0" stop="240" duration="1800" /&gt;
+It is defined with the following attributes:
+- `id` provides the identifier of the scaling object whose value is to be controlled
+- `start`and `stop` respectively define the integral value (between 0 and 255) at the beginning and the end of the dimming operation
+- `duration` defines the total length of the dimming operation, as a time span.
 
-  
+## Example
 
+The action below makes the value of the object `dim_value_kitchen` go from 0 to almost its maximum (240) in 30 minutes. The object will be set a new value every 8 seconds or so (240 levels to send in 1800s):
+```xml    
+<action type="dim-up" id="dim_value_kitchen" start="0" stop="240" duration="30m"/>
+```
 
 ## shell-cmd
 
