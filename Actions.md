@@ -262,17 +262,21 @@ The action below makes the value of the object `dim_value_kitchen` go from 0 to 
 <action type="dim-up" id="dim_value_kitchen" start="0" stop="240" duration="30m"/>
 ```
 
-## shell-cmd
+# shell-cmd
 
-Attribute _**cmd**_ defines the shell command to execute.  
-**Example**
-    
-    <action type="shell-cmd" cmd="killall -v eibd" />
+This action runs a shell command on the server running LinKNX. The command will run with the same privileges as LinKNX.
 
-## ioport-tx
+Its unique attribute is named `cmd` and contains the shell expression to execute.
 
-See [IO_Ports] 
+## Example
+```xml
+<action type="shell-cmd" cmd="wakeonlan -i 192.168.1.1 24:ef:12:1d:88:51"/>
+```
+
+# ioport-tx
+
+See the section about [IO ports](IO-Ports).
 
 ## script
 
-See [Lua_Scripting] 
+See the section about [LUA scripting](LUA-Scripting).
