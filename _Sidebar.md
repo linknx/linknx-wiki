@@ -15,6 +15,7 @@
     * [Actions](Actions)
     * [TimeSpec](TimeSpec)
 
-## [Integration with Other Tools](Integration)
+## [Integration](Integration)
 * [XML Protocol](Xml-Protocol)
+* [LUA Scripting](LUA-Scripting)
 * [IO Ports](IO-Ports)
