@@ -277,6 +277,6 @@ Its unique attribute is named `cmd` and contains the shell expression to execute
 
 See the section about [IO ports](IO-Ports).
 
-## script
+# script
 
 See the section about [LUA scripting](LUA-Scripting).
