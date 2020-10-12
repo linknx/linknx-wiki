@@ -100,7 +100,7 @@ This type of action cyclically toggles the value of a targeted binary object ide
 
 As a consequence, the first cycle starts off by setting the object to `on`. The last cycle ends with setting the object to `off`.
 
-An optional `<stopcondition/>` child element can be used to abort the cycles if the condition is met before `count` is reached. The syntax of this condition follows the principles of [any regular condition](/linknx/linknx/wiki/conditions) for actions.  
+An optional `<stopcondition/>` child element can be used to abort the cycles if the condition is met before `count` is reached. The syntax of this condition follows the principles of [any regular condition](Conditions) for actions.  
 
 ## Example
 ```xml
@@ -129,7 +129,7 @@ This type of action is defined as follows:
 # conditional
 
 When executed, this type of action executes one or several child actions if a condition is met. Otherwise, child actions are not executed.
-The condition is defined in a `<condition/>` child element, as per the [condition syntax](/linknx/linknx/wiki/conditions).
+The condition is defined in a `<condition/>` child element, as per the [condition syntax](Conditions).
 The actions are defined as `<action/>` child elements.
 
 ## Example
