@@ -219,7 +219,7 @@ This type of action defines a `rule-id` attribute which holds the identifier of 
 
 # send-sms
 
-This action sends a text message via the configured SMS gateway in the [services](/linknx/linknx/wiki/services) section of the configuration file. If no gateway is defined, an error will be raised when execution such actions.
+This action sends a text message via the configured SMS gateway in the [services](Services) section of the configuration file. If no gateway is defined, an error will be raised when execution such actions.
 
 This type of action requires two attributes to be defined:
 - `id` defines the phone number to text
