@@ -29,6 +29,7 @@ But all actions have an optional `delay` attribute defining the time span that m
 - `s` for seconds – this is the default unit if none is given
 - `ms` for milliseconds – from 0.0.1.28 onwards
 
+## Parameterization
 `send-sms`, `set-string`, `send-email`, `shell-cmd` and `ioport` actions can be parameterized with the value of one or several objects. To do so, their `var` attribute must be set to true to mark them as being parameterizable.
 Then, some of their attributes can refer to object values by inserting object labels following the convention `${id_of_the_object}`. This applies to the following attributes:
 - for `send-sms` actions: `id` and `value`
@@ -99,7 +100,7 @@ This type of action cyclically toggles the value of a targeted binary object ide
 
 As a consequence, the first cycle starts off by setting the object to `on`. The last cycle ends with setting the object to `off`.
 
-An optional `<stopcondition/>` child element can be used to abort the cycles if the condition is met before `count` is reached. The syntax of this condition follows the principles of [any regular condition](Conditions) for actions.  
+An optional `<stopcondition/>` child element can be used to abort the cycles if the condition is met before `count` is reached. The syntax of this condition follows the principles of [any regular condition](/linknx/linknx/wiki/conditions) for actions.  
 
 ## Example
 ```xml
@@ -128,7 +129,7 @@ This type of action is defined as follows:
 # conditional
 
 When executed, this type of action executes one or several child actions if a condition is met. Otherwise, child actions are not executed.
-The condition is defined in a `<condition/>` child element, as per the [condition syntax](Conditions).
+The condition is defined in a `<condition/>` child element, as per the [condition syntax](/linknx/linknx/wiki/conditions).
 The actions are defined as `<action/>` child elements.
 
 ## Example
@@ -203,26 +204,36 @@ Action enabling the `flashing_lights` rule, so that it becomes ready to execute 
 <action type="set-rule-active" active="yes" rule-id="flashing_lights"/>
 ```
 
+# cancel
+
+This type of action cancels the pending actions of a targeted rule. Cancelable actions fall into two categories:
+- actions which are waiting for their execution delay to be consumed after their parent rule has been triggered. Those correspond to actions which define a `delay` attribute and which have not yet started their execution
+- actions whose execution stretches over a period of time, such as [dim-up](#dim-up) or [cycle-on-off](#cycle-on-off). If such actions are cancelled while their execution is already ongoing, the operations that have already been done will not be automatically undone but the remaining operations that have not yet been applied will be skipped. Actions which are part of [repeat](#repeat) or [conditional](#conditional) actions cannot be canceled once they are running but the repetition itself can be aborted
+
+This type of action defines a `rule-id` attribute which holds the identifier of the rule to cancel.
+
+## Example
+```xml    
+<action type="cancel" rule-id="flashing_lights"/>
+```
+
+# send-sms
+
+This action sends a text message via the configured SMS gateway in the [services](/linknx/linknx/wiki/services) section of the configuration file. If no gateway is defined, an error will be raised when execution such actions.
+
+This type of action requires two attributes to be defined:
+- `id` defines the phone number to text
+- `value` contains the message to send
+
+Additionally, the `var` attribute can be set to `true` (`false` is the default) to activate the support for text message [parameterization](#parameterization).
+
+## Example
+```xml
+<action type="send-sms"  id="32494123456" value="Foreign contaminant"/>
+```
+
 ***
 THE TEXT BELOW NEEDS REVIEW
-
-
-## cancel
-
-Attribute _**rule-id**_ defines the rule for which all pending actions will be cancelled.  
-**Example**
-    
-    &lt;action type="cancel" rule-id="flashing_lights" /&gt;
-
-Pending actions are the actions waiting for execution due to the _**delay**_ attribute, or action that spread over a period of time like dim-up or cycle-on-off. For these actions that spread over time, what has already been executed at the moment of cancel will not be undone. Only the processing that is not yet done will be skipped. Actions that are inside _**repeat**_ or _**conditional**_ actions can not be canceled if they are started. But the repetition itself, or the initial sleep due to _**delay**_ attribute can be interrupted. 
-
-## send-sms
-
-Attribute _**id**_ defines the phone number where to send SMS.  
-Attribute _**value**_ defines the text of the message.  
-Attribute _**from**_ defines the optional sender ID to be inclued in the message **Example**
-    
-    &lt;action type="send-sms"  id="32494123456" value="Foreign contaminant" /&gt;
 
 ## send-email
 
