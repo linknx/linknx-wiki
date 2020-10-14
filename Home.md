@@ -1,4 +1,4 @@
-![linknx](/images/linknx-wide-dark-800x275.png)
+![linknx](images/linknx-wide-dark-800x275.png)
 
 Welcome to the linknx wiki! Use the navigation panel on the right to choose a section.
 
