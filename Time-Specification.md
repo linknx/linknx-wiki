@@ -1,10 +1,17 @@
-THIS PAGE WAS IMPORTED FROM SOURCEFORGE – NEEDS REVIEW!
+# General
+
+Time specifications are parts of the definition of [conditions](Conditions) of type `timer`. They are an intuitive and versatile way of scheduling a point in time. For example, they can define precise times such as:
+- constant clock time (03:00 PM, 04:15 AM, ...)
+- sunset/sunrise
+- the time provided by another object
+
+Some attributes depend on the way the time is specified but all time specifications can define the following attributes:
+- `type` is mandatory and tells how the time is specified. Its value must be one of `const`, `variable`, `sunrise`, `sunset` and `noon`
+- `hour`, `min`, `day`, `month` and `year`, if present, constrain the time specification. If an attribute is undefined, it is interpreted as a wildcard: for example if `hour` is not defined, the hour of day will not be taken into consideration when determining whether the current clock time matches the time specification. Please note that for all specification types but `const`, the values provided in these attributes may be discarded if they are incompatible with other natural constraints that the specification type brings. For example, setting `hour=12` on a `sunset` type of specification will most likely not make sense. In the end, the time specification resulting from the input configuration always enforces the individual limitations imposed by the type of specification selected.
+- `wdays` is an optional attribute limiting the scope of the specification to any combination of days of week. Days are identified with their 1-based index in the week, starting with Monday. The value of the attribute is a string featuring one, several or all of those day indices (ex: `125` for Monday, Tuesday and Friday)
+
 ***
-
-## General
-
-The type of timespec is determined by the _**type**_ attribute.  
-Supported values for this attribute are: _**constant**_ and _**variable**_ (default is _**const**_). Since version 0.0.1.25, _**sunrise**_, _**sunset**_ and _**noon**_ are also available. 
+THE TEXT BELOW NEEDS REVIEW
 
 ## Constant:
 
