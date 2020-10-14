@@ -1,6 +1,6 @@
 ![linknx](images/linknx-wide-dark-220x76.png)
 
-## [Building Linknx](Compiling)
+## [Installing Linknx](Compiling)
 * [Creating RPM](Building-RPM-Packages)
 * [Building for OpenWRT](Building-for-OpenWRT)
 * [Building for Optware](Building-for-Optware)
