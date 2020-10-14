@@ -97,6 +97,7 @@ Supported associations of types are:
 
 # Time-Counter Conditions (from version 0.0.1.25 onwards)
 
+## Definition
 In addition to [simple timer conditions](Timer-Conditions) and to the `delay` attribute in [actions](Actions), `time-counter` conditions are a flexible way of defining rich time-based conditions.
 Its definition consists of:
 - a `threshold` attribute
@@ -106,7 +107,7 @@ Its definition consists of:
 The state of a `time-counter` condition depends on the state of its child condition. It evaluates to `true` once the child condition has remained `true` for a `threshold` period of time.
 Once the child condition has remained `false` for a `reset-delay` period of time, the state of the condition switches back to `false.
 
-Example:
+## Example
 ```xml   
 <objects>
 	<object id="Test_Switch1" gad="10/5/15" type="1.001" flags="cwtus">Test_Switch1</object>
@@ -130,20 +131,21 @@ Example:
 In this example the child condition is `<condition type="object" id="Test_Switch1" value="on" trigger="true"/>`
 The behavior can be illustrated as in the diagram below:
 
-[[img src=timecounter-simple.png]] 
+![Simple time counter](Timecounter-simple.png)
 
-The _**time-counter**_ condition can also take short "spikes" into account as follows: The "true"-time is summed up until the "threshold" is reached or the "false" time has reached the "reset-delay". In this case the counting is started over. 
+## Advanced
+The `time-counter` is also designed to take short spikes into account. The time the child condition remains true is not measured in one chunk. This time sums up until the value indicated by `threshold` is reached. On the other hand, if the sum of time chunks spent with the child condition being false reaches the duration specified in `reset-delay`, the counter starts over.
+This is illustrated in the diagram below:
 
-[[img src=timecounter-complex.png]] 
+![Advanced time counter](Timecounter-complex.png)
 
-Example scenario for using this type of condition is to set a threshold between the noise detection status coming from a babyphone and the action to trigger. 
-    
-    <condition type="time-counter" threshold="15" reset-delay="5m">
-    
-    	<condition type="object" id="babyphone" value="on" trigger="true" />
-    
-    </condition>
-
-The condition is true if the babyphone detects noise for at least 15 seconds altogether. If no noise is seen for 5 minutes, the counter is reset.  
-  
-Another use can be determining between short and long button presses if you want to use wall buttons which do not support short and long presses natively (for instance BIQ switches without temperature control). You can programm the button for blinds control and calculate the time during which the button value is "1" or "9" (pressed) where the value "0" can be used to reset the counter. And then use this to switch two different lights instead of blinds control. 
+## Description of a Scenario
+Let's take the example of an audio baby monitor device that we would like to trigger a rule when it detects noise for a long-enough period of time. In order to limit false positive due to environmental noise, let's define the condition so that it evaluates to true after the sum of noisy time chunks is 15 seconds long. The counter should reset after 5 minutes of silence.
+The condition to define is then:
+```xml    
+<condition type="time-counter" threshold="15" reset-delay="5m">
+    <condition type="object" id="babyphone" value="on" trigger="true"/>
+</condition>
+```
+ 
+Another use case can be to tell short and long button presses apart. This type of condition can help to emulate short and long presses on wall buttons which do not natively support that feature (such as BIQ switches without temperature control).

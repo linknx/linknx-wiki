@@ -6,6 +6,9 @@ A rule consists of:
 - another optional action list to be executed when the condition evaluates to false (type="**if-false**"),
 - another optional action list to be executed when the condition just evaluates to true while its previous value was false (i.e. the condition just turned true) (type="**on-true**"),
 - another optional action list to be executed when the condition just evaluates to false while its previous value was true (i.e. the condition just turned false) (type="**on-false**"),
+- an optional `description` attribute providing details about the rule. This attribute does not affect the behavior of the rule from LinKNX's perspective. It is designed for clients, to provide informative details about the rule to the end user.
+- an optional `active` attribute set to `no` is the rule is disabled. Only enabled rules can execute actions, disabled ones are simply ignored. See the [set-rule-active](Actions#set-rule-active) type of action to learn of to change this state at runtime.
+- an `init` attribute determining how to initialize the status of the rule at startup. See [the dedicated section below](#initialization-upon-linknx-startup) for details.
 
 ```xml
 <rule id="xxxx">
@@ -140,7 +143,7 @@ This rule dims the bedroom light up smoothly from 0 to 94% (=240/255) during hal
 - the *wakeup_active* object is set to *on*
 - people are at home (object *absence* is set to *off*)
 
-# Rules on linknx startup
+# Initialization upon LinKNX startup
 
 Some rules are evaluated and triggered when linknx starts up and reads the configuration file while some are not. This is determined by the value of the *init* attribute:
 - if set to *true* or *false*, this value is used as initial value for the rule and the rule's condition is not evaluated at startup. No rule's action list is executed at that time, no matter what the rule's initial value is.
