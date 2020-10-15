@@ -8,10 +8,10 @@ Each object element describes a communication object.
 
 # Object definition main parameters
 
-The parameter "id" is mandatory and is used to identify the object in rules and by the XML based protocol.
-Parameter "gad" is optional. If specified, the object will be linked to that group address on KNX bus. If not, the object will only be accessible in rules and in XML based protocol.
+The `id` parameter is mandatory and serves as a unique identifier from other parts of the configuration that need to refer to the object, such as actions or conditions in rules. It also identifies in requests and responses done via the XML-based protocol.
+Parameter `gad` is optional. If specified, its value represents a group address on the KNX bus, which the object becomes a participant of. If not, the object cannot interact directly with the bus but can be used in the remainder of the configuration (rules, XML protocol).
 
-Here's a sample configuration:
+Here is a sample configuration:
 ```xml
 <objects>
 	<object type="1.001" id="alarm_active" init="persist">Alarm activated</object>
@@ -34,89 +34,88 @@ Here's a sample configuration:
 Since version 0.0.1.25, the object definition uses Datapoint Types defined in KNX standard instead of EIS datatypes.
 The old syntax is described in a [separate section](Object-definition-syntax-prior-to-0.0.1.25) for reference.
 
-The "type" parameter can be one of
+The `type`parameter can be one of:
+- 1.001: switching (on/off) (EIS1)
+- 1.002: bool (after 0.0.1.30)
+- 1.003: enable (after 0.0.1.30)
+- 1.004: ramp (after 0.0.1.30)
+- 1.005: alarm (after 0.0.1.30)
+- 1.006: binary value (after 0.0.1.30)
+- 1.007: step (after 0.0.1.30)
+- 1.008: up/down (after 0.0.1.30)
+- 1.009: open/close (after 0.0.1.30)
+- 1.010: start (after 0.0.1.30)
+- 1.011: state (after 0.0.1.30)
+- 1.012: invert (after 0.0.1.30)
+- 1.013: dim send style (after 0.0.1.30)
+- 1.014: input source (after 0.0.1.30)
+- 2.001: switch (after 0.0.1.30)
+- 2.002: bool (after 0.0.1.30)
+- 2.003: enable (after 0.0.1.30)
+- 2.004: ramp (after 0.0.1.30)
+- 2.005: alarm (after 0.0.1.30)
+- 2.006: binary value (after 0.0.1.30)
+- 2.007: step (after 0.0.1.30)
+- 2.008: direction1 control (after 0.0.1.30)
+- 2.009: direction2 control (after 0.0.1.30)
+- 2.010: start (after 0.0.1.30)
+- 2.011: state (after 0.0.1.30)
+- 2.012: invert  (after 0.0.1.30)
+- 3.007: dimming (control of dimmer using up/down/stop) (EIS2)
+- 3.008: blinds (control of blinds using close/open/stop)
+- 4.001: char ASCII (after 0.0.1.30)
+- 4.002: char 8859_1 (latin1) (after 0.0.1.30)
+- 5.xxx: 8bit unsigned integer (from 0 to 255) (EIS6)
+- 5.001: scaling (from 0 to 100%)
+- 5.003: angle (from 0 to 360°)
+- 5.010: value 1 pulse (after 0.0.1.30)
+- 6.xxx: 8bit signed integer (EIS14)
+- 7.xxx: 16bit unsigned integer (EIS10)
+- 8.xxx: 16bit signed integer
+- 9.xxx: 16 bit floating point number (EIS5)
+- 9.001: temp: °C (after 0.0.1.30)
+- 9.002: tempd: °K (after 0.0.1.30)
+- 9.003: tempa: K/H (after 0.0.1.30)
+- 9.004: lux: lux (after 0.0.1.30)
+- 9.005: wsp: m/s (after 0.0.1.30)
+- 9.006: pressure: Pa (after 0.0.1.30)
+- 9.007: humidity: % (after 0.0.1.30)
+- 9.008: air quality: ppm (after 0.0.1.30)
+- 9.010: time: s (after 0.0.1.30)
+- 9.011: time: ms (after 0.0.1.30)
+- 9.020: volt: mV (after 0.0.1.30)
+- 9.021: current: mA (after 0.0.1.30)
+- 9.022: power density: W/m² (after 0.0.1.30)
+- 9.023: kelvin per percent: K/% (after 0.0.1.30)
+- 9.024: power: kW (after 0.0.1.30)
+- 9.025: volume flow: L/h (after 0.0.1.30)
+- 9.026: rain amount: L/m² (after 0.0.1.30)
+- 9.027: value temp f: °F (after 0.0.1.30)
+- 9.028: value wsp kmh: km/h  (after 0.0.1.30)
+- 10.001: time (EIS3)
+- 11.001: date (EIS4)
+- 12.xxx: 32 bit unsigned integer (EIS11)
+- 13.xxx: 32 bit signed integer
+- 14.xxx: 32 bit IEEE 754 floating point number
+- 16.000: string (max 14 ASCII chars restricted to ASCII codes 0..127) (EIS15)
+- 16.001: string (max 14 ASCII chars in range 0..255)
+- 20.102: heating mode (auto/comfort/standby/night/frost)
+- 28.001: variable length string object
+- 29.xxx: signed 64 bit value
+- 232.600: rgb object 
 
-    1.001: switching (on/off) (EIS1)
-    1.002: bool (after 0.0.1.30)
-    1.003: enable (after 0.0.1.30)
-    1.004: ramp (after 0.0.1.30)
-    1.005: alarm (after 0.0.1.30)
-    1.006: binary value (after 0.0.1.30)
-    1.007: step (after 0.0.1.30)
-    1.008: up/down (after 0.0.1.30)
-    1.009: open/close (after 0.0.1.30)
-    1.010: start (after 0.0.1.30)
-    1.011: state (after 0.0.1.30)
-    1.012: invert (after 0.0.1.30)
-    1.013: dim send style (after 0.0.1.30)
-    1.014: input source (after 0.0.1.30)
-    2.001: switch (after 0.0.1.30)
-    2.002: bool (after 0.0.1.30)
-    2.003: enable (after 0.0.1.30)
-    2.004: ramp (after 0.0.1.30)
-    2.005: alarm (after 0.0.1.30)
-    2.006: binary value (after 0.0.1.30)
-    2.007: step (after 0.0.1.30)
-    2.008: direction1 control (after 0.0.1.30)
-    2.009: direction2 control (after 0.0.1.30)
-    2.010: start (after 0.0.1.30)
-    2.011: state (after 0.0.1.30)
-    2.012: invert  (after 0.0.1.30)
-    3.007: dimming (control of dimmer using up/down/stop) (EIS2)
-    3.008: blinds (control of blinds using close/open/stop)
-    4.001: char ASCII (after 0.0.1.30)
-    4.002: char 8859_1 (latin1) (after 0.0.1.30)
-    5.xxx: 8bit unsigned integer (from 0 to 255) (EIS6)
-    5.001: scaling (from 0 to 100%)
-    5.003: angle (from 0 to 360°)
-    5.010: value 1 pulse (after 0.0.1.30)
-    6.xxx: 8bit signed integer (EIS14)
-    7.xxx: 16bit unsigned integer (EIS10)
-    8.xxx: 16bit signed integer
-    9.xxx: 16 bit floating point number (EIS5)
-    9.001: temp: °C (after 0.0.1.30)
-    9.002: tempd: °K (after 0.0.1.30)
-    9.003: tempa: K/H (after 0.0.1.30)
-    9.004: lux: lux (after 0.0.1.30)
-    9.005: wsp: m/s (after 0.0.1.30)
-    9.006: pressure: Pa (after 0.0.1.30)
-    9.007: humidity: % (after 0.0.1.30)
-    9.008: air quality: ppm (after 0.0.1.30)
-    9.010: time: s (after 0.0.1.30)
-    9.011: time: ms (after 0.0.1.30)
-    9.020: volt: mV (after 0.0.1.30)
-    9.021: current: mA (after 0.0.1.30)
-    9.022: power density: W/m² (after 0.0.1.30)
-    9.023: kelvin per percent: K/% (after 0.0.1.30)
-    9.024: power: kW (after 0.0.1.30)
-    9.025: volume flow: L/h (after 0.0.1.30)
-    9.026: rain amount: L/m² (after 0.0.1.30)
-    9.027: value temp f: °F (after 0.0.1.30)
-    9.028: value wsp kmh: km/h  (after 0.0.1.30)
-    10.001: time (EIS3)
-    11.001: date (EIS4)
-    12.xxx: 32bit unsigned integer (EIS11)
-    13.xxx: 32bit signed integer
-    14.xxx: 32 bit IEEE 754 floating point number
-    16.000: string (max 14 ASCII chars restricted to ASCII codes 0..127) (EIS15)
-    16.001: string (max 14 ASCII chars in range 0..255)
-    20.102: heating mode (auto/comfort/standby/night/frost)
-    28.001: variable length string object
-    29.xxx: signed 64bit value
-    232.600: rgb object 
-
-It's optional and the default value is 1.001.
+It is optional defaults to 1.001.
 
 # Flags
 
 The "flags" parameter works the same as in ETS. The value of each flag is represented by a character:
-+ c: Communication (allow the object to interact with the KNX bus)
-+ r: Read (allow the object to answer to a read request from another participant)
-+ w: Write (update the object's internal value with the one received in write telegram if they are different)
-+ t: Transmit (allow the object to transmit it's value on the bus if it's modified internally by a rule or via XML protocol)
-+ u: Update (update the object's internal value with the one received in "read response" telegram if they are different)
-+ f: Force (force the object value to be transmitted on the bus, even if it didn't change).In the recent versions you can use s : Stateless flag alternatively which means exactly the same (object does not update it's state so linknx should always send it's value to the bus
-+ i: Init (useless for the moment. Will perhaps replace the parameter init="request" in the future)
+- c: Communication (allow the object to interact with the KNX bus)
+- r: Read (allow the object to answer to a read request from another participant)
+- w: Write (update the object's internal value with the one received in write telegram if they are different)
+- t: Transmit (allow the object to transmit it's value on the bus if it's modified internally by a rule or via XML protocol)
+- u: Update (update the object's internal value with the one received in "read response" telegram if they are different)
+- f: Force (force the object value to be transmitted on the bus, even if it didn't change).In the recent versions you can use s : Stateless flag alternatively which means exactly the same (object does not update it's state so linknx should always send it's value to the bus
+- i: Init (useless for the moment. Will perhaps replace the parameter init="request" in the future)
 
 Each of these characters set their corresponding flag when appearing in the flags attribute.
 The flags attributes defaults to "cwtu" (Communication, Write, Transmit and Update), which should suit most cases. For example, objects like switches often represent the real switch state.
@@ -148,7 +147,7 @@ Please note that a listener object is added as a separate xml element inside an 
 <object id="all_lamps" gad="4/1/99" init="request">All Lamps on_off</object>
 ```
 
-The "lamp17" object's value can change with a telegram for lamp17 but also with one for all_lamps.
+The value of the `lamp17` object can change with a telegram for lamp17 but also with one for all_lamps.
 The optional 'read="true"' attribute states that the object should not fetch its value by sending a read request to the KNX bus. It must instead request listener object's value and copy it. This is used in scenarios where a device - a switch actuator for instance - participates in two different group addresses:
 + one to set the new value to the controlled switch actuator
 + another one to read this actuator's status object

@@ -1,4 +1,4 @@
-For basic information on how to compile Linknx, please refer to [Compiling](Compiling).
+For basic information on how to compile Linknx, please refer to [this page](Compiling).
 
 Here I'll briefly introduce the method to cross-compile Linknx for OpenWRT.
 

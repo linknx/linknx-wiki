@@ -33,7 +33,7 @@ Please note that you can force the timer condition to remain `false` on exceptio
 
 ## Comments
 
-* Please note that you can use a combination of timer conditions where some are used to trigger evaluation at a given time while others are define the general timeframe when a condition can be valid.
+* Please note that you can use a combination of timer conditions where some are used to trigger evaluation at a given time and others set the timeframe when a condition can be valid.
 The example below illustrates this feature with a condition that should trigger every day at 8:00 AM in the period ranging from mid-September to mid-March.
 ```xml
 <condition type="and">
