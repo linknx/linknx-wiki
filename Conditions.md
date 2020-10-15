@@ -24,7 +24,7 @@ This type of condition is defined by means of its children elements. They can be
 
 Elements `at` and `every` are mutually exclusive. One of the two **must** be present for the condition to be valid.
 Elements `until` and `during` are mutually exclusive. Their presence is optional.
-For details about attributes for `at` and `until`, please refer to section about the [time specification](TimeSpec) section.
+For details about attributes for `at` and `until`, please refer to section about the [time specification](Time-Specification) section.
 Elements `every` and `during` cannot have attributes. Their internal text value defines a period of time in seconds.  
 At the time specified by `at` or time interval specified by `every` , the timer condition evaluates to `true`.
 When the time specified by `until` is reached or when the time duration specified by `during` is expired, the timer condition evaluates to `false`.

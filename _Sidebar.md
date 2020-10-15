@@ -15,7 +15,7 @@
 * [Rules](Rules)
     * [Conditions](Conditions)
     * [Actions](Actions)
-    * [TimeSpec](TimeSpec)
+    * [TimeSpec](Time-Specification)
 
 ## [Integration](Integration)
 * [XML Protocol](Xml-Protocol)
