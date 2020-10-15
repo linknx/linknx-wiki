@@ -22,10 +22,10 @@ Some attributes depend on the way the time is specified but all time specificati
 
 Behavior on exception days is summarized in the table below:
 
-|                 | `exception="yes"`  |  `exception="no" | `exception=""` or undefined |
-|  :------------: | :----------------: | :--------------: | :-------------------------: |
-| Normal day      |     disabled       |    *enabled*     |    *enabled*                | 
-| Exceptional day |     *enabled*      |    disabled      |    *enabled*                |
+|                 | `exception="yes"`  |  `exception="no"` | `exception=""` or undefined |
+|  :------------: | :----------------: | :---------------: | :-------------------------: |
+| Normal day      |     disabled       |   **enabled**     |    **enabled**              | 
+| Exceptional day |    **enabled**     |    disabled       |    **enabled**              |
 
 # Type-Specific Configuration
 
@@ -35,7 +35,7 @@ A time specification based on a constant time does not require any attributes in
 
 ### Examples:  
 
-Specification matching all weekday at 07:30 AM local time except on days flagged as exceptional:
+Specification matching all weekdays at 07:30 AM local time except on days flagged as exceptional:
 ```xml
 <at hour="7" min="30" wdays="12345" exception="no"/>
 ```
@@ -52,13 +52,13 @@ Specification matching all Saturdays and Sundays at 07:30 PM, no matter if they 
 
 ## Object-Provided Time
 
-In addition to the [common attributes](#common-attributes), time specification corresponding to the value of another object can define the `time` and `date` attributes. If defined and not equal to the empty string, those attributes must respectively refer to objects of type `10.001` (formerly `EIS3`) and `11.001` (formerly `EIS4`). The time and date read from those objects are used to fill in the gaps of the base definition represented by the common attributes.
- Please note that the values in the common attributes always take precedence over constraints provided by the time- and date-providing objects. For example, setting `hour="11" min="0"` would force the time specification to match at 11:00 AM whatever the value of the time-providing object.
+In addition to the [common attributes](#common-attributes), time specification of type `variable` can define the `time` and `date` attributes. If defined and not equal to the empty string, those attributes must respectively refer to objects of type `10.001` (formerly `EIS3`) and `11.001` (formerly `EIS4`). The time and date read from those objects are used to fill in the gaps of the base definition represented by the common attributes.
 
+Please note that the values in the common attributes always take precedence over constraints provided by the time- and date-providing objects. For example, setting `hour="11" min="0"` would force the time specification to match at 11:00 AM whatever the value of the time-providing object.
 
 ### Examples
 
-Specification matching on weekdays, at the time stored in the object of identifier `wakeup_time`:
+Specification matching weekdays, at the time stored in the object of identifier `wakeup_time`:
 ```xml
 <at type="variable" time="wakeup_time" wdays="12345"/>
 ```
@@ -70,17 +70,17 @@ Specification matching at 10:00 PM the day corresponding to the date stored in t
 
 ## Solar Time
 
-This category of time specification was introduced in version 0.0.1.25 and corresponds to the types `sunrise`, `sunset` and `noon`.
+This category of time specification was introduced in version 0.0.1.25 and corresponds to types `sunrise`, `sunset` and `noon`.
 
-For this type of specification to work, the [services](Services) section of the configuration must declare geographic coordinates (longitude and latitude) as in the example below:
+For these types to work, the [services](Services) section of the configuration must declare geographic coordinates (longitude and latitude) as in the example below:
 ```xml
 <location lon="-4.20" lat="50.54"/>
 ```
 
-The specification then targets the time the sun rises, sets or to the median time between those two.
+The specification then targets the time the sun rises, sets or the median time between those two.
 
-As one can expect, defining `hour` `min` alongside `type=sunrise|sunset|noon` is quite inconsistent. The solar time will always take precedence over those two basic attributes.
-On the other hand, defining `day`, `month` and/or `year` still makes complete sense. 
+As one can expect, defining `hour` or `min` alongside `type=sunrise|sunset|noon` is somehow inconsistent. The solar time will always take precedence over those two basic attributes.
+On the other hand, defining `day`, `month` and/or `year` can still supplement the time provided by the solar configuration.
 
 ### Example
 Here is a sample condition evaluating to true on Mondays and Tuesdays, from two hours before sunrise to 11:58 PM: 
