@@ -19,6 +19,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          # Fetch full history
+          fetch-depth : 0
 
       - name: Declare source repo
         run: |
@@ -28,8 +31,10 @@ jobs:
       - name: Declare destination repo
         run: git remote add upstream https://${{ secrets.SYNC_ACCESS_TOKEN }}@github.com/linknx/linknx.wiki.git
 
-      - name: Fetch destination repo
-        run: git fetch upstream
+      - name: Fetch repos
+        run: |
+            git fetch origin
+            git fetch upstream
       
       - name: Keep any local changes done directly in upstream
         run: git merge upstream/master --no-edit
