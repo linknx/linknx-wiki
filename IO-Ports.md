@@ -17,8 +17,8 @@ Here's an example of ioports configuration:
 
 The supported parameters are: 
 
-  * _**id**_&nbsp;: The IO port identifier (mandatory) used by conditions and actions 
-  * _**type**_&nbsp;: The port type can be _**udp**_ or _**tcp**_. Default=_**udp**_
+  * `id`: The IO port identifier (mandatory) used by conditions and actions 
+  * `type`: The port type can be _**udp**_ or _**tcp**_. Default=_**udp**_
 
 The other parameters are type-dependent.  
 For port type _**udp**_: 
