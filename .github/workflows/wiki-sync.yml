@@ -23,7 +23,7 @@ jobs:
       - name: Declare source repo
         run: |
           git remote remove origin
-          git remote add upstream https://${{ secrets.SYNC_ACCESS_TOKEN }}@github.com/linknx/linknx-wiki.git
+          git remote add origin https://${{ secrets.SYNC_ACCESS_TOKEN }}@github.com/linknx/linknx-wiki.git
 
       - name: Declare destination repo
         run: git remote add upstream https://${{ secrets.SYNC_ACCESS_TOKEN }}@github.com/linknx/linknx.wiki.git
@@ -35,7 +35,7 @@ jobs:
         run: git merge upstream/master --no-edit
       
       - name: Push to wiki source repo
-        run: git push origin HEAD:master
+        run: git push origin HEAD:main
       
       - name: Push to destination
         run: git push upstream HEAD:master
