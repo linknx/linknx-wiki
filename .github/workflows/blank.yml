@@ -23,10 +23,10 @@ jobs:
       - name: Declare source repo
         run: |
           git remote remove origin
-          git remote add upstream https://${{ secrets.SYNC_ACCESS_TOKEN }@github.com/linknx/linknx-wiki.git
+          git remote add upstream https://${{ secrets.SYNC_ACCESS_TOKEN }}@github.com/linknx/linknx-wiki.git
 
       - name: Declare destination repo
-        run: git remote add upstream https://${{ secrets.SYNC_ACCESS_TOKEN }@github.com/linknx/linknx.wiki.git
+        run: git remote add upstream https://${{ secrets.SYNC_ACCESS_TOKEN }}@github.com/linknx/linknx.wiki.git
 
       - name: Fetch destination repo
         run: git fetch upstream
