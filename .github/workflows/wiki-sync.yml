@@ -23,6 +23,9 @@ jobs:
           # Fetch full history
           fetch-depth : 0
 
+      - name: Declare user
+        run: git config user.name 2franix
+
       - name: Declare source repo
         run: |
           git remote remove origin
