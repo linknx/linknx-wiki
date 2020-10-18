@@ -23,9 +23,9 @@ The supported parameters are:
 The other parameters are type-dependent.  
 For port type _**udp**_: 
 
-  * host&nbsp;: The destination used for sending udp data (optional, only needed for sending) 
-  * port&nbsp;: The destination port used for sending udp data (optional, only needed for sending) 
-  * rxport&nbsp;: The local port used to listen for incoming udp data (optional, only needed for reception) 
+  * `host`: The destination used for sending udp data (optional, only needed for sending) 
+  * `port`: The destination port used for sending udp data (optional, only needed for sending) 
+  * `rxport`: The local port used to listen for incoming udp data (optional, only needed for reception) 
 
 For port type _**tcp**_: 
 
