@@ -43,7 +43,7 @@ Whatever the reasons you are reading this section for, start by reviewing [issue
 
 ## Bug reporting
 
-If you think something is not working as expected, consider submitting a [new issue](issues/new). Make sure it contains the following items:
+If you think something is not working as expected, consider submitting a [new issue](https://github.com/linknx/linknx/issues/new). Make sure it contains the following items:
 - the version of linknx you are running
 - the options passed to `./configure`. You can review them in the `config.log` file generated at the root of the source code
 - the steps to reproduce the problem
@@ -58,4 +58,4 @@ Ideas are welcome! Especially when they are well thought through. The clearer th
 
 Like for reporting bugs, submit a new issue and make sure to describe your proposal. Adding new features takes time and requires extra care to maintain the overall stability of the software so please advocate for your request with a use case that explains why it would be useful.
 
-If you are feeling adventurous, [fork](fork) the source code repo and submit your proposal via a pull request. 
+If you are feeling adventurous, [fork](https://github.com/linknx/linknx/fork) the source code repo and submit your proposal via a pull request. 
