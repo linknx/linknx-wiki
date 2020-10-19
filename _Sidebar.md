@@ -21,3 +21,5 @@
 * [XML Protocol](Xml-Protocol)
 * [LUA Scripting](LUA-Scripting)
 * [IO Ports](IO-Ports)
+
+## [Contributing to Linknx](Contributing)
