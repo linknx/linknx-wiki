@@ -39,7 +39,11 @@ You want to help but don't know what to do? Review the open issues and pick one 
 
 # Working in the source code
 
+<<<<<<< Updated upstream
 Whatever the reasons you are reading this section for, start by reviewing [issues](/issues). Search for one already covering your remark / question / concern. If none helped to answer your case, continue reading.
+=======
+Whatever the reasons you are reading this section for, start by reviewing [issues](https://github.com/linknx/linknx/issues). Search for one already covering your remark / question / concern. If none helped to answer your case, continue reading.
+>>>>>>> Stashed changes
 
 ## Bug reporting
 
@@ -58,4 +62,4 @@ Ideas are welcome! Especially when they are well thought through. The clearer th
 
 Like for reporting bugs, submit a new issue and make sure to describe your proposal. Adding new features takes time and requires extra care to maintain the overall stability of the software so please advocate for your request with a use case that explains why it would be useful.
 
-If you are feeling adventurous, [fork](https://github.com/linknx/linknx/fork) the source code repo and submit your proposal via a pull request. 
+If you are feeling adventurous, [fork](https://github.com/linknx/linknx/fork) the source code repo and submit your proposal via a pull request. Make sure the PR references the issue you created. 
