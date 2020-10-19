@@ -39,7 +39,7 @@ You want to help but don't know what to do? Review the open issues and pick one 
 
 # Working in the source code
 
-Whatever the reasons you are reading this section for, start by reviewing [issues](issues). Search for one already covering your remark / question / concern. If none helped to answer your case, continue reading.
+Whatever the reasons you are reading this section for, start by reviewing [issues](/issues). Search for one already covering your remark / question / concern. If none helped to answer your case, continue reading.
 
 ## Bug reporting
 
