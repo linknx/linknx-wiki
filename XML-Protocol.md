@@ -1,7 +1,7 @@
 THIS PAGE WAS IMPORTED FROM SOURCEFORGE – NEEDS REVIEW!
 
-Applications or user-interfcaes who want to communicate with Linknx can do this using the XML protocol defined hereunder.  
-Linknx support communication using a TCP connection or UNIX domain socket. The configuration is done in the "services" section of the configuration file.  
+Applications or user interfaces who want to communicate with linknx can do this using the XML protocol defined hereunder.  
+Linknx supports communication using a TCP connection or UNIX domain socket. The configuration is done in the `<services/>` section of the [configuration](Configuration).
 Once the communication is established, XML commands can be sent and answer received. Multiple commands can be sent successively over the same connection. For Linknx to be able to detect the end of a command, the command must end with the special ASCII character EOT (ASCII code 0x04, Ctrl-D in interactive terminal session). The problem is that it is not easy to send this character from a script. The easiest way to achieve this is to create a text file containing this character only, and append it to any information sent to linknx  
 
 
