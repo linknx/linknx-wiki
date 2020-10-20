@@ -11,6 +11,10 @@ on:
   pull_request:
     branches: [ main ]
 
+  schedule:
+      # At midnight everyday.
+      - cron: '0 0 * * *'
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   synchronize-actual-wiki:
@@ -47,7 +51,7 @@ jobs:
       
       - name: Push to wiki source repo
         # Do not push to main@source_repo in case of a PR or that would automatically merge the PR!
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' }} || ${{ github.event_name == 'schedule' }}
         run: git push origin HEAD:main
       
       - name: Push to destination
