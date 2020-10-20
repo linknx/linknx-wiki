@@ -46,6 +46,8 @@ jobs:
         run: git merge upstream/master --no-edit
       
       - name: Push to wiki source repo
+        # Do not push to main@source_repo in case of a PR or that would automatically merge the PR!
+        if: ${{ github.event_name == 'push' }}
         run: git push origin HEAD:main
       
       - name: Push to destination
