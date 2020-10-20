@@ -5,10 +5,6 @@ Linknx supports communication using a TCP connection or UNIX domain socket. The 
 Once the communication is established, XML commands can be sent and answer received. Multiple commands can be sent successively over the same connection. For Linknx to be able to detect the end of a command, the command must end with the special ASCII character EOT (ASCII code 0x04, Ctrl-D in interactive terminal session). The problem is that it is not easy to send this character from a script. The easiest way to achieve this is to create a text file containing this character only, and append it to any information sent to linknx  
 
 
-There are several types of commands: 
-
-[TOC]
-
 ## read object
 
 Read object commands are used to retrieve the current value of an object. The only parameter is "id" containing the object identifier. 
