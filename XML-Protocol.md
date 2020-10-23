@@ -1,80 +1,105 @@
-THIS PAGE WAS IMPORTED FROM SOURCEFORGE – NEEDS REVIEW!
+# A protocol for client-server interactions
 
-Applications or user interfaces who want to communicate with linknx can do this using the XML protocol defined hereunder.  
-Linknx supports communication using a TCP connection or UNIX domain socket. The configuration is done in the `<services/>` section of the [configuration](Configuration).
-Once the communication is established, XML commands can be sent and answer received. Multiple commands can be sent successively over the same connection. For Linknx to be able to detect the end of a command, the command must end with the special ASCII character EOT (ASCII code 0x04, Ctrl-D in interactive terminal session). The problem is that it is not easy to send this character from a script. The easiest way to achieve this is to create a text file containing this character only, and append it to any information sent to linknx  
+Client applications or user interfaces who want to communicate with linknx can leverage the XML communication protocol to do so. This page is aimed at documenting its syntax.
+Linknx can open an optional communication channel in the form a TCP or UNIX domain socket. The related configuration corresponds to the `<services/>` section of the [configuration](Configuration).
+This channel can be used to send XML-formatted requests, to which linknx replies with a XML response. The format of such XML documents is described below.
+
+A single connection can be reused to send multiple requests. The request document must end with an [End-of-Transmission character](https://en.wikipedia.org/wiki/End-of-Transmission_character) (ASCII code 0x04, Ctrl-D in an interactive terminal).
 
 
-## read object
+# Request content
 
-Read object commands are used to retrieve the current value of an object. The only parameter is "id" containing the object identifier. 
+## Read object
+
+Read object commands are used to retrieve the current value of an object. It defines the single `id` attribute that contains the identifier of the object to get the value of.
     
-    Command:
-    <read><object id="temp_bureau"/></read>
-    Answer:
-    <read status='success'>20.2</read>
+Example:
+```xml
+<read><object id="temp_bureau"/></read>
+Answer:
+<read status='success'>20.2</read>
+```
 
-It's also possible to read all or multiple objects with the following commands: 
+It is also possible to read several or all objects at once with the commands below.
+
+To read all objects: 
+```xml
+<read><objects/></read>
+```
     
-    <read><objects/></read>
+To read several objects: 
+```xml
+<read><objects><object id="obj_id1"/><object id="obj_id2"/><object id="obj_id3"/>...</objects></read>
+```
+
+## Write object
+
+Write object commands are used to set the value of an object. It must contain two attributes:
+- `id` contains the object identifier
+- `value` contains the value to set
     
-    <read><objects><object id="obj_id1"/><object id="obj_id2"/><object id="obj_id3"/>...</objects></read>
+Example:
+```xml
+<write><object id="ecl_bureau" value="off"/></write>
+```
 
-  
+## Read calendar
 
+This command is used to query sunrise/sunset/noon time and exception days.
 
-## write object
+Example:
+```xml
+<read><calendar month="9" day="30" /></read>
+```
 
-Write object commands are used to set the value of an object. The 2 mandatory parameters are "id" containing the object identifier and "value" containing the value to set. 
-    
-    Command:
-    <write><object id="ecl_bureau" value="off"/></write>
-    Answer:
-    <write status='success'/>
+## Read config
 
-## read calendar
-
-This command can be used to query for sunrise/sunset/noon time and for exception days: 
-    
-    
-    <read><calendar month="9" day="30" /></read>
-    
-
-## read config
-
-Read config command is used to retrieve all or parts of Linknx's configuration.  
+The read config command retrieves all or parts of the current configuration.  
 The syntax of configuration elements is the same as in the XML configuration file.  
-Retrieve the complete configuration: 
-    
-    Command:
-    <read><config/></read>
-    Answer:
-    <read status="success">
-            <config>
-                    <objects>
-                            .....
-                    </objects>
-                    <rules>
-                            .....
-                    </rules>
-                    <services>
-                            .....
-                    </services>
-            </config>
-    </read>
 
-Retrieve only rules (the same applies for objects or services): 
+Example to retrieve the whole configuration:
     
-    Command:
-    <read><config><rules/></config></read>
-    Answer:
-    <read status="success">
-            <config>
-                    <rules>
-                            .....
-                    </rules>
-            </config>
-    </read>
+```xml
+<read><config/></read>
+```
+
+The expected response from linknx looks like this:
+```xml
+<read status="success">
+	<config>
+		<objects>
+			[...]
+		</objects>
+		<rules>
+			[...]
+		</rules>
+		<services>
+			[...] 
+		</services>
+	</config>
+</read>
+```
+
+To limit the scope of the requested configuration to rules only:
+```xml
+<read><config><rules/></config></read>
+```
+
+The expected response from linknx:
+```xml
+<read status="success">
+	<config>
+		<rules>
+			[...]
+		</rules>
+	</config>
+</read>
+```
+
+Replace `<rules/>` with `<object/>` or `<services/>` in the sample above to retrieve configuration about objects or services.
+
+***
+THE TEXT BELOW NEEDS REVIEW
 
 ## write config
 
