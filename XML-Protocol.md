@@ -195,6 +195,7 @@ Make sure not to delete objects that are referred to by rules. There are current
 		</services>
 	</config>
 </write>
+```
 
 Expected response from linknx:
 ```xml
