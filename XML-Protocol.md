@@ -1,194 +1,301 @@
-THIS PAGE WAS IMPORTED FROM SOURCEFORGE – NEEDS REVIEW!
+# A protocol for client-server interactions
 
-Applications or user interfaces who want to communicate with linknx can do this using the XML protocol defined hereunder.  
-Linknx supports communication using a TCP connection or UNIX domain socket. The configuration is done in the `<services/>` section of the [configuration](Configuration).
-Once the communication is established, XML commands can be sent and answer received. Multiple commands can be sent successively over the same connection. For Linknx to be able to detect the end of a command, the command must end with the special ASCII character EOT (ASCII code 0x04, Ctrl-D in interactive terminal session). The problem is that it is not easy to send this character from a script. The easiest way to achieve this is to create a text file containing this character only, and append it to any information sent to linknx  
+Client applications or user interfaces who want to communicate with linknx can leverage the XML communication protocol to do so. This page is aimed at documenting its syntax.
+Linknx can open an optional communication channel in the form a TCP or UNIX domain socket. The related configuration corresponds to the `<services/>` section of the [configuration](Configuration).
+This channel can be used to send XML-formatted requests, to which linknx replies with a XML response. The format of such XML documents is described below.
+
+A single connection can be reused to send multiple requests. The request document must end with an [End-of-Transmission character](https://en.wikipedia.org/wiki/End-of-Transmission_character) (ASCII code 0x04, Ctrl-D in an interactive terminal).
 
 
-## read object
+# Request content
 
-Read object commands are used to retrieve the current value of an object. The only parameter is "id" containing the object identifier. 
+## Read object
+
+Read object commands are used to retrieve the current value of an object. It defines the single `id` attribute that contains the identifier of the object to get the value of.
     
-    Command:
-    <read><object id="temp_bureau"/></read>
-    Answer:
-    <read status='success'>20.2</read>
+Example:
+```xml
+<read><object id="temp_bureau"/></read>
+Answer:
+<read status='success'>20.2</read>
+```
 
-It's also possible to read all or multiple objects with the following commands: 
+It is also possible to read several or all objects at once with the commands below.
+
+To read all objects: 
+```xml
+<read><objects/></read>
+```
     
-    <read><objects/></read>
+To read several objects: 
+```xml
+<read><objects><object id="obj_id1"/><object id="obj_id2"/><object id="obj_id3"/>...</objects></read>
+```
+
+## Write object
+
+Write object commands are used to set the value of an object. It must contain two attributes:
+- `id` contains the object identifier
+- `value` contains the value to set
     
-    <read><objects><object id="obj_id1"/><object id="obj_id2"/><object id="obj_id3"/>...</objects></read>
+Example:
+```xml
+<write><object id="ecl_bureau" value="off"/></write>
+```
 
-  
+## Read calendar
 
+This command is used to query sunrise/sunset/noon time and exception days.
 
-## write object
+Example:
+```xml
+<read><calendar month="9" day="30" /></read>
+```
 
-Write object commands are used to set the value of an object. The 2 mandatory parameters are "id" containing the object identifier and "value" containing the value to set. 
-    
-    Command:
-    <write><object id="ecl_bureau" value="off"/></write>
-    Answer:
-    <write status='success'/>
+## Read config
 
-## read calendar
-
-This command can be used to query for sunrise/sunset/noon time and for exception days: 
-    
-    
-    <read><calendar month="9" day="30" /></read>
-    
-
-## read config
-
-Read config command is used to retrieve all or parts of Linknx's configuration.  
+The read config command retrieves all or parts of the current configuration.  
 The syntax of configuration elements is the same as in the XML configuration file.  
-Retrieve the complete configuration: 
+
+Example to retrieve the whole configuration:
     
-    Command:
-    <read><config/></read>
-    Answer:
-    <read status="success">
-            <config>
-                    <objects>
-                            .....
-                    </objects>
-                    <rules>
-                            .....
-                    </rules>
-                    <services>
-                            .....
-                    </services>
-            </config>
-    </read>
+```xml
+<read><config/></read>
+```
 
-Retrieve only rules (the same applies for objects or services): 
-    
-    Command:
-    <read><config><rules/></config></read>
-    Answer:
-    <read status="success">
-            <config>
-                    <rules>
-                            .....
-                    </rules>
-            </config>
-    </read>
+The expected response from linknx looks like this:
+```xml
+<read status="success">
+	<config>
+		<objects>
+			[...]
+		</objects>
+		<rules>
+			[...]
+		</rules>
+		<services>
+			[...] 
+		</services>
+	</config>
+</read>
+```
 
-## write config
+To limit the scope of the requested configuration to rules only:
+```xml
+<read><config><rules/></config></read>
+```
 
-Write config command is used to add or update all or parts of linknx's configuration.  
+The expected response from linknx:
+```xml
+<read status="success">
+	<config>
+		<rules>
+			[...]
+		</rules>
+	</config>
+</read>
+```
+
+Replace `<rules/>` with `<object/>` or `<services/>` in the sample above to retrieve configuration about objects or services.
+
+## Write config
+
+The write config command is used to set all or parts of the current configuration.
 The syntax of configuration elements is the same as in the XML configuration file.  
-Add or update a rule: 
-    
-    Command:
-    <write><config><rules>
-            <rule id="xxx">
-                <condition type="yyy">
-                    .....
-                </condition>
-                <actionlist>
-                    .....
-                </actionlist>
-            </rule>
-    </rules></config></write>
-    Answer:
-    <write status='success'/>
 
-If a rule with the same id already exists, it will be updated. If not, a new rule will be added.  
-In case of update, the previous condition will be kept if no condition is specified.  
+The command can contain any number of sections, each of them containing any number of elements. It is even possible to define the entire config in one single command.
+There is no transaction mechanism yet, so if a command returns an error, config parts that appear before the location that caused the error are processed and the remainder is not. To be on the safe side, it is usually good practice to to split large commands in several more atomic commands.
+
+### Update a rule
+```xml
+<write>
+	<config>
+		<rules>
+			<rule id="xxx">
+				<condition type="yyy">
+					[...]
+				</condition>
+				<actionlist>
+					[...]
+				</actionlist>
+			</rule>
+		</rules>
+	</config>
+</write>
+```
+
+The expected response from linknx:
+```xml
+<write status='success'/>
+```
+
+If a rule with the given id already exists, it is updated. Otherwise a new rule is be added to the configuration.
+When updating the rule, the current condition is inserted in the new rule if none is specified.
 The same applies for action lists, but both lists (to execute when condition becomes true and false) will be cleared if one of them is specified.  
-Delete a rule: 
-    
-    Command:
-    <write><config><rules>
+
+### Delete a rule
+```xml 
+<write>
+	<config>
+		<rules>
             <rule id="xxx" delete="true"/>
-    </rules></config></write>
-    Answer:
-    <write status='success'/>
+    	</rules>
+	</config>
+</write>
+```
+ 
+Expected response from linknx:
+```xml
+<write status='success'/>
+```
 
-Add or update an object: 
-    
-    Command:
-    <write><config><objects>
-            <object id="cur_date" gad="1/1/151" flags="cwtuf" type="EIS4">Current Date</object>
-    </objects></config></write>
-    Result:
-    <write status='success'/>
+### Add or update an object
+```xml
+<write>
+	<config>
+		<objects>
+			<object id="cur_date" gad="1/1/151" flags="cwtuf" type="EIS4">Current Date</object>
+		</objects>
+	</config>
+</write>
+```
 
-If an object with the same id already exists, it will be updated. If not, a new object will be added.  
-In case of update, the object's internal state will be reset to the one specified by "init" parameter. In case init is missing, empty or equals "request", the previous internal state will be preserved.  
-Delete an object: 
-    
-    Command:
-    <write><config><objects>
+Expected response from linknx:
+```xml
+<write status='success'/>
+```
+
+If an object with the given id already exists, it is updated. Otherwise, a new object is added.  
+When updating, the object's internal state is reset according to the value of the `init` attribute. If the attribute is not defined, is empty or equals `request`, the internal state is left unchanged.  
+
+### Delete an object
+```xml
+<write>
+	<config>
+		<objects>
             <object id="xxx" delete="true"/>
-    </objects></config></write>
-    Answer:
-    <write status='success'/>
+    	</objects>
+	</config>
+</write>
+```
 
-Be careful not to delete objects still in use by some rules, there are actually no checks made internally to protect against that. 
+Expected response from linknx:
+```xml
+<write status='success'/>
+```
 
-(Re-)Configure a service: 
-    
-    Command:
-    <write><config><services>
-            <emailserver type="smtp" host="smtp.anothermailserver.net:25" from="linknx@mydomain.com"/>
-    </services></config></write>
-    Answer:
-    <write status='success'/>
+Make sure not to delete objects that are referred to by rules. There are currently no checks to guard against this.
 
-There is no way to delete things here, but some services can be set to inactive by specifying no parameters for it. 
+### Configure a service
+```xml
+<write>
+	<config>
+		<services>
+			<emailserver type="smtp" host="smtp.anothermailserver.net:25" from="linknx@mydomain.com"/>
+		</services>
+	</config>
+</write>
 
-A "write config" command can contain one or more sections, each of them containing one or more elements. You can even set the entire config in one single command.  
-There is no transaction mechanism yet. If a command containing multiple sections and/or elements is executed and returns an error, everything located before the error is processed and everything located after it is not. So for safety, it's perhaps better to split big commands in smaller parts. 
+Expected response from linknx:
+```xml
+<write status='success'/>
+```
 
-  
+The protocol does not provide any ways to delete a service. But some can be disabled by omitting all of their attributes. 
 
+## Execute action
 
-## execute action
+This type of command executes one or several actions defined with the same syntax as [the one used in rules](Actions). 
 
-Execute action command can be used to manually trigger execution of an action: 
-    
-    Command:
-    <execute><action .../><action .../></execute>
-    
+Example:
+```xml 
+<execute>
+	<action .../>
+	<action .../>
+</execute>   
+```
 
-  
+## Read version string
 
+This command gets the current version information, including details on optional features that were enabled or disabled at compile time.
 
-## set rule active
+Example:
+```xml  
+<read>
+	<version/>
+</read>
+```
 
-Set rule active / inactive can be used as a special action to enable or disable triggering of some rules. 
-    
-    
-    <execute><action type="set-rule-active" .../></execute>
-    
+On an instance of version 0.0.1.30, built with the SMS, MySQL, LUA and log4cpp options enabled, the expected answer from linknx is:
+```xml    
+<read status="success">
+	<version>
+		<value>0.0.1.30</value>
+		<features>
+			<sms/>
+			<e-mail/>
+			<mysql/>
+			<lua/>
+			<log4cpp/>
+		</features>
+	</version>
+</read>
+```
 
-## read version string
+## Administration
 
-This command can be used to retrieve the current version information, including information on optional features of linknx that can be enabled or disabled during compilation. **Example:**
-    
-    <read><version/></read>
+This type of command is used to perform administrative operations on the running instance, such as:
+- save the current configuration to an XML file
+- register for notifications whenever a given object changes
 
-Should give response similiar to this: 
-    
-    <read status="success">
-        <version>
-            <value>0.0.1.30</value>
-            <features>
-                <sms />
-                <e-mail />
-                <mysql />
-                <lua />
-                <log4cpp />
-            </features>
-        </version>
-    </read>
+This command is declared with a root `<admin/>` element, containing child element whose type depends on the actual admin task to perform.
+The complete schema for this command is:
+```xml
+<admin>
+	<save file="/path/to/config.xml"/>
+	<notification>
+		<register id="object_id"/>
+		<unregister id="object_id"/>
+		<registerall/>
+		<unregisterall/>
+	</notification>
+</admin>
+```
 
-Here the version is 0.0.1.30 compiled with the following options enabled: sms, mysql, lua and log4cpp. 
+### Save configuration
 
-## admin
+To save the configuration that is currently loaded and active in the running instance of linknx, the command must declare a `<save/>` child element.
+This element defines a unique attribute `file` which holds the path to the file to write. If not set, this attribute defaults to the file that was used to load the initial configuration from during startup.
 
-This command is not yet implemented 
+The following example saves the configuration to the file `/etc/linknx/config.xml`:
+```xml
+<admin>
+	<save file="/etc/linknx/config.xml"/>
+</admin>
+```
+
+The expected response from linknx is:
+```xml
+<admin status="success"/>
+```
+
+### Notify of object changes
+
+A client can include a `<notification/>` child element in the admin command if it wants to be notified of object changes. The `<notification/>` element itself can contain up to the four following types of elements:
+- `<register id="object_id"/>` to subscribe to changes for object of id `object_id`
+- `<unregister id="object_id"/>` to undo the effect of the above command
+- `<registerall/>` to subscribe to changes on any of the objects
+- `<unregisterall/>` to unsubscribe from all objects this connection subscribed to. No notifications will be sent after that point
+
+When an object the connection has subscribed to undergoes a change, the connection is reused to send the following message to the client:
+```xml
+<notify id="object_id"
+	<!-- object value here -->
+</notify>
+```
+The format of the actual object value depends on the nature of the object.
+
+Whatever the content of `<notification/>` is, the expected response from linknx is:
+```xml
+<admin status="success"/>
+```
