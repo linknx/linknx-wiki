@@ -1,5 +1,12 @@
 # General
 
+The general form of a condition is
+```xml
+<condition type="...">
+	...
+</condition>
+```
+
 The type of condition is determined by the `type` attribute.  
 Supported values for this attribute are:
 - for object-based conditions: [object](#object), [object-src](#object-src) and [object-compare](#object-compare)
@@ -165,7 +172,7 @@ Another use case can be to tell short and long button presses apart. This type o
 
 # Scripted conditions
 
-A script condition is a LUA script that is executed when the rule is evaluated. The return value is interpreted as a boolean. 
+A script condition is a Lua script that is executed when the rule is evaluated. The return value is interpreted as a boolean. 
 
 Example:
 ```xml

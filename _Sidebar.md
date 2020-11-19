@@ -1,13 +1,13 @@
 ![linknx](images/linknx-wide-dark-220x76.png)
 
-## [Installing Linknx](Compiling)
+## [Installing linknx](Compiling)
 * [Creating RPM](Building-RPM-Packages)
 * [Building for OpenWRT](Building-for-OpenWRT)
 * [Building for Optware](Building-for-Optware)
 
 ## [Accessing the KNX bus](Accessing-the-KNX-Bus)
 
-## [Configuring Linknx](Configuration)
+## [Configuring linknx](Configuration)
 * [Logging](Logging)
 * [Services](Services)
 * [Objects](Objects)
@@ -19,7 +19,7 @@
 
 ## [Integration](Integration)
 * [XML Protocol](Xml-Protocol)
-* [LUA Scripting](LUA-Scripting)
+* [Lua Scripting](Lua-scripting)
 * [IO Ports](IO-Ports)
 
-## [Contributing to Linknx](Contributing)
+## [Contributing to linknx](Contributing)
