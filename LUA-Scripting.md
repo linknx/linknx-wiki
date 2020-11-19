@@ -1,53 +1,38 @@
-THIS PAGE WAS IMPORTED FROM SOURCEFORGE – NEEDS REVIEW!
-***
+Lua scripting was introduced in version 0.0.1.26.
 
-Since version 0.0.1.26, Lua scripting has been introduced. 
+Lua scripting commands can be used in actions and their conditions to have more flexibility over the definition of such actions.
+Readers who are knew to Lua should check out the [official website](https://www.lua.org) for reference documentation.
 
-Lua script is very simple and lightweight. Have a look at the [Lua 5.1 reference manual](http://www.lua.org/manual/5.1/) for further info. 
+# Lua functions
 
-## Condition
+In the context of Lua scripting embedded in linknx, the following functions are available.
 
-A script condition is a LUA script that is executed when the rule is evaluated. The return value is interpreted as a boolean. 
-```xml
-<condition type="script">
-    return tonumber(obj("setpoint_room1")) &gt; tonumber(obj("temp_room1"));
-</condition>
-```
+## obj
 
-In versions before 0.0.1.28, the condition is evaluated twice. So be careful if you reuse variables from one execution to the next one, or if you display some text with lua print function, it will be executed twice. This bug is corrected since 0.0.1.28. 
+`obj(object_id)`
 
-## Action
+Allows to access the current value of a linknx object (the value is returned as a string). Available in conditions and actions.
 
-A script action is a LUA script that is executed when the action is executed. 
-```xml    
-<action type="script">
-    delta = obj("setpoint_room1")-obj("temp_room1");
-    value = math.min(math.max(100*delta, 255),0);
-    print ("value = ", value);
-    set("heat_room1", value);
-</action>
-```
+## isException
 
-## LUA functions
+`isException(timestamp)`
 
-The following functions are available in LUA-scripts. 
+Tells whether `timestamp` is an exception day. If no timestamp is given, the current time is used. Available in conditions.
 
-### obj
+## set
 
-The function obj(object_id) allows to access the current value of a linknx object (the value is returned as a string). Available in Conditions and Actions. 
+`set(object_id, value)`
 
-### isException
+Assigns `value` to the linknx object of id `object_id`. Available in actions.
 
-Check if timestamp "ts" is an exception day. If no timestamp is given, the current time is used. Available in Conditions. 
+## iosend
 
-### set
+`iosend(ioport, data)`
 
-set(object_id, value) sets the current value of a linknx object to value. Available in Actions. 
+Sends `data` to `ioport`. See also [IO-Ports](io-ports). Available in actions.
 
-### iosend
+## sleep
 
-iosend(ioport, data) sends "data" to "ioport". See also [IO_Ports]. Available in Actions. 
+`sleep(delay)`
 
-### sleep
-
-sleep(delay) suspends LUA script execution for "delay" seconds. Available in Actions. 
+Suspends the execution of the script for `delay` seconds. Available in actions.

@@ -279,4 +279,16 @@ See the section about [IO ports](IO-Ports).
 
 # script
 
-See the section about [LUA scripting](LUA-Scripting).
+A script action is a Lua script that is executed when the action is executed. The script is declared as the inner text of the `<action/>` element.
+
+Example:
+```xml    
+<action type="script">
+    delta = obj("setpoint_room1")-obj("temp_room1");
+    value = math.min(math.max(100*delta, 255),0);
+    print ("value = ", value);
+    set("heat_room1", value);
+</action>
+```
+
+See the section about [Lua scripting](Lua-Scripting) for details about linknx-specific Lua functions.
