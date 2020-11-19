@@ -1,7 +1,7 @@
 Lua scripting was introduced in version 0.0.1.26.
 
 Lua scripting commands can be used in actions and their conditions to have more flexibility over the definition of such actions.
-Readers who are knew to Lua should check out the [official website](https://www.lua.org) for reference documentation.
+Readers who are new to Lua should check out the [official website](https://www.lua.org) for reference documentation.
 
 # Lua functions
 
