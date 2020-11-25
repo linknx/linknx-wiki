@@ -1,12 +1,11 @@
-THIS PAGE HAS BEEN IMPORTED FROM SOURCEFORGE – NEEDS REVIEW!
-***
+First IO ports support was introduced in version 0.0.1.26. Serial port were introduced in version 0.0.1.28.
 
-Since version 0.0.1.26, IO Ports support has been introduced. Support for serial port is introduced in 0.0.1.28. 
+# Configuration
 
-## Configuration
+Like other services, the configuration for IO ports lies in the `<services>` section of the [XML configuration](Services). Each port has an identifier that conditions and actions can refer to to send and receive data over it.  
 
-The configuration of io ports is located in the _**services**_ section. Each IO port has an identifier that can be used in conditions and actions to send and receive data over it.  
-Here's an example of ioports configuration: 
+## Sample configuration
+
 ```xml    
 <ioports>
     <ioport id="irtrans" host="192.168.0.18" port="21000" rxport="21001"/>
@@ -15,30 +14,27 @@ Here's an example of ioports configuration:
 </ioports>
 ```
 
-The supported parameters are: 
+### Common attributes
 
-  * `id`: The IO port identifier (mandatory) used by conditions and actions 
-  * `type`: The port type can be _**udp**_ or _**tcp**_. Default=_**udp**_
+- `id`: the mandatory IO port identifier used by conditions and actions.
+- `type`: the port type. Either `udp` (default) or `tcp`.
 
-The other parameters are type-dependent.  
-For port type _**udp**_: 
+### Attributes for `udp`
 
-  * `host`: The destination used for sending udp data (optional, only needed for sending) 
-  * `port`: The destination port used for sending udp data (optional, only needed for sending) 
-  * `rxport`: The local port used to listen for incoming udp data (optional, only needed for reception) 
+- `host`, `port`: resp. address and port to send data to. These attributes are only relevant when sending data and are thus optional. 
+- `rxport`:local port used to listen to incoming udp data. Only relevant for receiving and thus optional.
 
-For port type _**tcp**_: 
+### Attributes for `tcp` 
 
-  * host&nbsp;: The destination used for sending udp data (optional, only needed for sending) 
-  * port&nbsp;: The destination port used for sending udp data (optional, only needed for sending) 
-  * permanent&nbsp;: If "true", the connection will be kept open after sending data. If some conditions are configured, the connection is always kept open. 
+- `host`, `port`: resp. address and port to send data to. These attributes are only relevant when sending data and are thus optional. 
+- `permanent`: when set to `true`, tell the IO port to keep its connection open after data was sent.
 
-For port type _**serial**_: 
+### Attributes for `serial` 
 
-  * dev&nbsp;: The serial port device (e.g.: /dev/ttyS0) 
-  * speed&nbsp;: Baudrate (200, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200 or 23400) 
-  * framing&nbsp;: 3 characters (nb of data bits, parity and nb of stop bits; Default: "8N1" ) describing the framin settings. Nb of data bits range from 5 to 8 included. Parity is E (even), O (odd) or N (none). Nb of stop bits is 1 or 2. 
-  * flow&nbsp;: Flow control setting (none, xon-xoff or rts-cts; Default: none). 
+- `dev`: serial port device (e.g.: /dev/ttyS0) 
+- `speed`: baudrate (200, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200 or 23400) 
+- `framing`: 3 characters (nb of data bits, parity and nb of stop bits; Default: "8N1" ) describing the framing settings. Number of data bits ranges from 5 to 8 included. Parity is E (even), O (odd) or N (none). Number of stop bits is 1 or 2. 
+- `flow`: flow control setting. Value is one of `none` (default), `xon-xoff` and `rts-cts`. 
 
 For the moment, the TCP io port can only connect as a client to external TCP servers. It's not possible for linknx to be the server allowing TCP clients to connect to it.  
 The message delimitation is also not implemented, so the received data is transferred to conditions chunk-by-chunk as it is received. This can make a difference in case of big messages if they are fragmented in smaller parts. In future release, the massage delimitation (based on delimiter characters or timeouts) will be added. 
