@@ -5,15 +5,8 @@ name: Deploy Wiki
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the main branch
 on:
-  push:
-    branches: [ main ]
-
   pull_request:
-    branches: [ main ]
-
-  schedule:
-      # At midnight everyday.
-      - cron: '0 0 * * *'
+    branches: [ base ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -23,37 +16,5 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        with:
-          # Fetch full history
-          fetch-depth : 0
-          token: ${{ secrets.SYNC_ACCESS_TOKEN }}
-
-      - name: Declare user
-        run: git config user.name 2franix
-
-        #- name: Declare source repo
-        #  run: |
-        #    git remote remove origin
-        #    git remote add origin https://${{ secrets.SYNC_ACCESS_TOKEN }}@github.com/linknx/linknx-wiki.git
-
-      - name: Declare destination repo
-        run: git remote add upstream https://${{ secrets.SYNC_ACCESS_TOKEN }}@github.com/linknx/linknx.wiki.git
-
-      - name: Fetch repos
-        run: |
-            git fetch origin
-            git fetch upstream
-      
-      - name: Keep any local changes done directly in upstream
-        run: git merge upstream/master --no-edit
-      
-      - name: Push to wiki source repo
-        # Do not push to main@source_repo in case of a PR or that would automatically merge the PR!
-        if: ${{ github.event_name == 'push' || github.event_name == 'schedule' }}
-        run: git push origin HEAD:main
-      
-      - name: Push to destination
-        if: ${{ github.event_name == 'push' }}
-        run: git push upstream HEAD:master
+      - name: Echo secret
+        run: echo ${{ secrets.SYNC_ACCESS_TOKEN }}
