@@ -40,7 +40,7 @@ For port type _**serial**_:
   * framing&nbsp;: 3 characters (nb of data bits, parity and nb of stop bits; Default: "8N1" ) describing the framin settings. Nb of data bits range from 5 to 8 included. Parity is E (even), O (odd) or N (none). Nb of stop bits is 1 or 2. 
   * flow&nbsp;: Flow control setting (none, xon-xoff or rts-cts; Default: none). 
 
-For the moment, the TCP io port can only connect as a client to external TCP servers. It's not possible for linknx to be the server allowing TCP clients to connect to it.  
+For the moment, the TCP IO port can only connect as a client to external TCP servers. It's not possible for linknx to be the server allowing TCP clients to connect to it.  
 The message delimitation is also not implemented, so the received data is transferred to conditions chunk-by-chunk as it is received. This can make a difference in case of big messages if they are fragmented in smaller parts. In future release, the massage delimitation (based on delimiter characters or timeouts) will be added. 
 
 ## Conditions
